@@ -19,5 +19,5 @@ def listar_orgaos(pagina=1):
 orgaos_pagina_1 = listar_orgaos(pagina=1)
 if orgaos_pagina_1:
     for i in orgaos_pagina_1:
-        print(i['descricao'])
+        print(i['descricao'], i['codigo'])
     #print(orgaos_pagina_1)
