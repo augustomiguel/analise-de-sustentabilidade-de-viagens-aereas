@@ -174,3 +174,5 @@ cython_debug/
 .pypirc
 # Local virtual environment
 requirements.txt
+# Local data files
+dados_viagens/
