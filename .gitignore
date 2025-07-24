@@ -176,3 +176,6 @@ cython_debug/
 requirements.txt
 # Local data files
 dados_viagens/
+dadosViagens\dados_viagens2024\2024_Passagens.csv
+dadosViagens\dados_viagens2024\2024_trecho.csv
+dadosViagens\dados_viagens2024\2024_viagens.csv
