@@ -12,7 +12,7 @@ DIRETORIO_SCRIPT = os.path.dirname(os.path.abspath(__file__))
 CACHE_API_FILE = os.path.join(DIRETORIO_SCRIPT, 'coordenadas_api_cache.csv')
 
 # O Excel (CodTrechos.xlsx) usa o caminho relativo do notebook
-ARQUIVO_COORDENADAS_LOCAIS = "documentosWalleci/CodTrechos.xlsx" 
+ARQUIVO_COORDENADAS_LOCAIS = "documentosWalleci/CodTrechos.xlsx"
 NOME_SHEET_LOCAL = "ID_Cidades"
 TEMPO_ESPERA = 1.1 
 CHECKPOINT_LOTE = 50 
@@ -74,7 +74,7 @@ class Distancia:
             if os.stat(caminho_cache).st_size == 0:
                  return pd.DataFrame(columns=['Cidade', 'Latitude', 'Longitude'])
             
-            # 🚨 ROBUSTEZ: on_bad_lines='warn' para ignorar linhas malformadas e engine='python' para melhor parsing
+            # ROBUSTEZ MÁXIMA: Tenta carregar. Se falhar, sugere que o usuário apague o arquivo.
             df_cache = pd.read_csv(caminho_cache, encoding='latin1', on_bad_lines='warn', engine='python')
             
             if df_cache.empty or 'Cidade' not in df_cache.columns:
@@ -86,7 +86,6 @@ class Distancia:
             return df_cache
             
         except Exception as e:
-            # Se a leitura falhar (Parsing), sugere a exclusão do arquivo para recriação.
             print(f"   ❌ ERRO FATAL ao ler o cache API '{caminho_cache}': {e}. Sugestão: Apague o arquivo.", flush=True)
             return pd.DataFrame(columns=['Cidade', 'Latitude', 'Longitude'])
 
@@ -102,7 +101,6 @@ class Distancia:
         
     def obter_mapa_coordenadas_hibridas(self, cidades_list: list):
         """Implementação da lógica de geocoding com checkpoint."""
-        # ... (Resto do código omitido por brevidade, mas deve ser mantido como o anterior)
         cidades_list = [str(c).strip() for c in cidades_list if pd.notna(c)]
         cidades_list_df = pd.Series(np.unique(cidades_list)).to_frame(name='Cidade')
 
@@ -126,7 +124,9 @@ class Distancia:
         resultados_api = []
         start_time = time.time()
         
-        header_needed = not os.path.exists(CACHE_API_FILE) or os.stat(CACHE_API_FILE).st_size == 0
+        # AQUI ESTÁ A CORREÇÃO: Verifica se o cabeçalho é necessário APENAS na primeira escrita.
+        # CRÍTICO: Se o arquivo existir, o cabeçalho NÃO DEVE ser escrito novamente.
+        header_needs_to_be_written = not os.path.exists(CACHE_API_FILE) or os.stat(CACHE_API_FILE).st_size == 0
         
         for i, cidade in enumerate(cidades_para_geocoding):
             
@@ -144,15 +144,17 @@ class Distancia:
                 if resultados_api:
                     df_novos_coords_lote = pd.DataFrame(resultados_api)
                     
+                    # Salva no modo APPEND. O 'header' é controlado pela variável de controle.
                     df_novos_coords_lote.to_csv(
                         CACHE_API_FILE, 
                         index=False, 
                         mode='a', 
-                        header=header_needed,
+                        header=header_needs_to_be_written,
                         encoding='latin1'
                     )
                     
-                    header_needed = False
+                    # Se o cabeçalho foi escrito, ele não precisa ser escrito novamente (nem que seja um checkpoint).
+                    header_needs_to_be_written = False
                     
                     print(f"   >>> CHECKPOINT SALVO: {i + 1}/{num_faltantes} cidades processadas e salvas no disco.", flush=True)
                     
@@ -162,7 +164,7 @@ class Distancia:
             time.sleep(TEMPO_ESPERA)
         
         
-        # 3. Finalização: Fusão e Sobrescrita Total
+        # 3. Finalização: Fusão e Sobrescrita Total (Garantir o Cache Primário)
         df_cache_completo = self._load_api_cache()
         df_local = self._load_local_base()
         
@@ -172,7 +174,7 @@ class Distancia:
         mapa_final.to_csv(
             CACHE_API_FILE, 
             index=False, 
-            mode='w', 
+            mode='w', # Sobrescreve TUDO (API + Excel) para tornar o cache a fonte única.
             header=True, 
             encoding='latin1'
         )
@@ -193,3 +195,29 @@ class Distancia:
         a = np.sin(dlat/2.0)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon/2.0)**2
         c = 2 * np.arcsin(np.sqrt(a))
         return R * c
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+#  def verificar_duplicados(self):
+#         """Verifica e imprime cidades duplicadas no mapa de coordenadas."""
+#         if self.mapa_coordenadas is None:
+#             print("❌ Mapa de coordenadas não carregado.", flush=True)
+#             return
+        
+#         duplicados = self.mapa_coordenadas[self.mapa_coordenadas.duplicated(subset=['Cidade'], keep=False)]
+        
+#         if not duplicados.empty:
+#             print("⚠️ Atenção: Cidades duplicadas encontradas no mapa de coordenadas:", flush=True)
+#             print(duplicados.sort_values(by='Cidade'), flush=True)
+#         else:
+#             print("✅ Nenhuma cidade duplicada encontrada no mapa de coordenadas.", flush=True)
