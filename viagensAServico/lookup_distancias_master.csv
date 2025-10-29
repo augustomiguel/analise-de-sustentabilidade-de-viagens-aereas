@@ -1,0 +1,367 @@
+Origem - Cidade,Destino - Cidade,Latitude_Origem,Longitude_Origem,Latitude_Destino,Longitude_Destino,Distância (GCD)
+Tóquio,"João Pessoa, Paraíba",35.676422,139.650027,-7.121598,-34.882028,16791.388079
+"João Pessoa, Paraíba",Tóquio,-7.121598,-34.882028,35.676422,139.650027,16791.388079
+Las Vegas,"João Pessoa, Paraíba",36.171563,-115.139101,-7.121598,-34.882028,9609.831314
+"João Pessoa, Paraíba",Las Vegas,-7.121598,-34.882028,36.171563,-115.139101,9609.831314
+Campinas,"João Pessoa, Paraíba",-22.905822,-47.06635,-7.121598,-34.882028,2186.14279
+"João Pessoa, Paraíba",Campinas,-7.121598,-34.882028,-22.905822,-47.06635,2186.14279
+"Recife, Pernambuco","Brasília, Distrito Federal",-8.058493,-34.884819,-15.793987,-47.8828,1654.009901
+"Brasília, Distrito Federal","João Pessoa, Paraíba",-15.793987,-47.8828,-7.121598,-34.882028,1712.490321
+"João Pessoa, Paraíba","Brasília, Distrito Federal",-7.121598,-34.882028,-15.793987,-47.8828,1712.490321
+"São Paulo, São Paulo","João Pessoa, Paraíba",-23.550651,-46.633382,-7.121598,-34.882028,2216.197905
+Sinop,"João Pessoa, Paraíba",-11.860852,-55.509488,-7.121598,-34.882028,2321.827738
+"João Pessoa, Paraíba","Cuiabá, Mato Grosso",-7.121598,-34.882028,-15.598669,-56.09913,2495.026672
+"Cuiabá, Mato Grosso",Sinop,-15.598669,-56.09913,-11.860852,-55.509488,420.476049
+"João Pessoa, Paraíba","Belo Horizonte, Minas Gerais",-7.121598,-34.882028,-19.922732,-43.945095,1726.670817
+"Belo Horizonte, Minas Gerais","João Pessoa, Paraíba",-19.922732,-43.945095,-7.121598,-34.882028,1726.670817
+"João Pessoa, Paraíba","Salvador, Bahia",-7.121598,-34.882028,-12.98225,-38.481277,761.46256
+"Salvador, Bahia","João Pessoa, Paraíba",-12.98225,-38.481277,-7.121598,-34.882028,761.46256
+"Recife, Pernambuco",Lisboa,-8.058493,-34.884819,38.722252,-9.139337,5842.967135
+Lisboa,"Recife, Pernambuco",38.722252,-9.139337,-8.058493,-34.884819,5842.967135
+"João Pessoa, Paraíba",Foz do Iguaçu,-7.121598,-34.882028,-25.54321,-54.583145,2926.393516
+Foz do Iguaçu,"João Pessoa, Paraíba",-25.54321,-54.583145,-7.121598,-34.882028,2926.393516
+Iaundê,"São Paulo, São Paulo",3.868987,11.521334,-23.550651,-46.633382,6993.644437
+"São Paulo, São Paulo",Iaundê,-23.550651,-46.633382,3.868987,11.521334,6993.644437
+"João Pessoa, Paraíba","São Paulo, São Paulo",-7.121598,-34.882028,-23.550651,-46.633382,2216.197905
+"Rio de Janeiro, Rio de Janeiro","João Pessoa, Paraíba",-22.911014,-43.209373,-7.121598,-34.882028,1968.773596
+"João Pessoa, Paraíba","Rio de Janeiro, Rio de Janeiro",-7.121598,-34.882028,-22.911014,-43.209373,1968.773596
+"Brasília, Distrito Federal","Recife, Pernambuco",-15.793987,-47.8828,-8.058493,-34.884819,1654.009901
+"Manaus, Amazonas","João Pessoa, Paraíba",-3.200177,-59.498929,-7.121598,-34.882028,2760.118324
+"João Pessoa, Paraíba","Manaus, Amazonas",-7.121598,-34.882028,-3.200177,-59.498929,2760.118324
+"Salvador, Bahia","Recife, Pernambuco",-12.98225,-38.481277,-8.058493,-34.884819,673.973876
+"Fortaleza, Ceará","João Pessoa, Paraíba",-3.730451,-38.521799,-7.121598,-34.882028,551.793259
+"João Pessoa, Paraíba","Fortaleza, Ceará",-7.121598,-34.882028,-3.730451,-38.521799,551.793259
+Guarulhos,"João Pessoa, Paraíba",-23.454237,-46.533745,-7.121598,-34.882028,2201.542366
+"João Pessoa, Paraíba",Guarulhos,-7.121598,-34.882028,-23.454237,-46.533745,2201.542366
+Santa Rita,"Salvador, Bahia",-7.151193,-34.970712,-12.98225,-38.481277,753.646961
+"Salvador, Bahia",Santa Rita,-12.98225,-38.481277,-7.151193,-34.970712,753.646961
+Cascavel,"João Pessoa, Paraíba",-4.130065,-38.241489,-7.121598,-34.882028,498.819799
+"João Pessoa, Paraíba",Cascavel,-7.121598,-34.882028,-4.130065,-38.241489,498.819799
+"São Luís, Maranhão","João Pessoa, Paraíba",-2.529526,-44.296394,-7.121598,-34.882028,1161.125651
+"João Pessoa, Paraíba","São Luís, Maranhão",-7.121598,-34.882028,-2.529526,-44.296394,1161.125651
+"Recife, Pernambuco","Salvador, Bahia",-8.058493,-34.884819,-12.98225,-38.481277,673.973876
+"João Pessoa, Paraíba","Vitória, Espírito Santo",-7.121598,-34.882028,-20.320092,-40.337668,1580.931702
+"João Pessoa, Paraíba","Goiânia, Goiás",-7.121598,-34.882028,-16.680882,-49.253269,1888.88625
+"Goiânia, Goiás","João Pessoa, Paraíba",-16.680882,-49.253269,-7.121598,-34.882028,1888.88625
+"Curitiba, Paraná","João Pessoa, Paraíba",-25.494438,-49.284271,-7.121598,-34.882028,2551.393846
+"João Pessoa, Paraíba","Curitiba, Paraná",-7.121598,-34.882028,-25.494438,-49.284271,2551.393846
+"Recife, Pernambuco","Rio de Janeiro, Rio de Janeiro",-8.058493,-34.884819,-22.911014,-43.209373,1875.550535
+"Rio de Janeiro, Rio de Janeiro","Rio de Janeiro, Rio de Janeiro",-22.911014,-43.209373,-22.911014,-43.209373,0.0
+"Natal, Rio Grande do Norte","Goiânia, Goiás",-5.805398,-35.20809,-16.680882,-49.253269,1949.463863
+"Porto Alegre, Rio Grande do Sul","João Pessoa, Paraíba",-30.0325,-51.230377,-7.121598,-34.882028,3066.583014
+"Brasília, Distrito Federal","Porto Alegre, Rio Grande do Sul",-15.793987,-47.8828,-30.0325,-51.230377,1619.66044
+Franca,"João Pessoa, Paraíba",-20.535698,-47.404257,-7.121598,-34.882028,2010.606349
+"João Pessoa, Paraíba",Franca,-7.121598,-34.882028,-20.535698,-47.404257,2010.606349
+"João Pessoa, Paraíba",Maringá,-7.121598,-34.882028,-23.42101,-51.933731,2569.247869
+Maringá,"João Pessoa, Paraíba",-23.42101,-51.933731,-7.121598,-34.882028,2569.247869
+"João Pessoa, Paraíba","Porto Alegre, Rio Grande do Sul",-7.121598,-34.882028,-30.0325,-51.230377,3066.583014
+"Recife, Pernambuco","Vitória, Espírito Santo",-8.058493,-34.884819,-20.320092,-40.337668,1484.213586
+"Vitória, Espírito Santo","Recife, Pernambuco",-20.320092,-40.337668,-8.058493,-34.884819,1484.213586
+"Vitória, Espírito Santo","Vitória, Espírito Santo",-20.320092,-40.337668,-20.320092,-40.337668,0.0
+Beijing,"João Pessoa, Paraíba",39.904211,116.407395,-7.121598,-34.882028,15383.134731
+"João Pessoa, Paraíba",Xangai,-7.121598,-34.882028,31.230416,121.473701,16379.393061
+"João Pessoa, Paraíba","João Pessoa, Paraíba",-7.121598,-34.882028,-7.121598,-34.882028,0.0
+"João Pessoa, Paraíba","Campo Grande, Mato Grosso do Sul",-7.121598,-34.882028,-20.464017,-54.616295,2591.460345
+"Campo Grande, Mato Grosso do Sul","João Pessoa, Paraíba",-20.464017,-54.616295,-7.121598,-34.882028,2591.460345
+"João Pessoa, Paraíba",Piracicaba,-7.121598,-34.882028,-22.734275,-47.648016,2209.182186
+Piracicaba,"João Pessoa, Paraíba",-22.734275,-47.648016,-7.121598,-34.882028,2209.182186
+"João Pessoa, Paraíba","Florianópolis, Santa Catarina",-7.121598,-34.882028,-27.5973,-48.54961,2694.042022
+"Florianópolis, Santa Catarina","João Pessoa, Paraíba",-27.5973,-48.54961,-7.121598,-34.882028,2694.042022
+"João Pessoa, Paraíba","Recife, Pernambuco",-7.121598,-34.882028,-8.058493,-34.884819,104.178447
+"Recife, Pernambuco","João Pessoa, Paraíba",-8.058493,-34.884819,-7.121598,-34.882028,104.178447
+Petrolina,"João Pessoa, Paraíba",-9.389091,-40.503061,-7.121598,-34.882028,667.922727
+"João Pessoa, Paraíba",Petrolina,-7.121598,-34.882028,-9.389091,-40.503061,667.922727
+Campina Grande,"Salvador, Bahia",-7.222378,-35.873439,-12.98225,-38.481277,701.159516
+"Santiago, Chile","João Pessoa, Paraíba",-33.437776,-70.65045,-7.121598,-34.882028,4698.345751
+"João Pessoa, Paraíba","Santiago, Chile",-7.121598,-34.882028,-33.437776,-70.65045,4698.345751
+"São Luís, Maranhão","Recife, Pernambuco",-2.529526,-44.296394,-8.058493,-34.884819,1209.530487
+"João Pessoa, Paraíba",Londrina,-7.121598,-34.882028,-23.304442,-51.169528,2503.171218
+Londrina,"João Pessoa, Paraíba",-23.304442,-51.169528,-7.121598,-34.882028,2503.171218
+"Recife, Pernambuco","São Luís, Maranhão",-8.058493,-34.884819,-2.529526,-44.296394,1209.530487
+"Belém, Pará","Recife, Pernambuco",-1.45056,-48.468245,-8.058493,-34.884819,1674.18766
+"Recife, Pernambuco","Belém, Pará",-8.058493,-34.884819,-1.45056,-48.468245,1674.18766
+"João Pessoa, Paraíba","Belém, Pará",-7.121598,-34.882028,-1.45056,-48.468245,1632.550506
+"Belém, Pará","João Pessoa, Paraíba",-1.45056,-48.468245,-7.121598,-34.882028,1632.550506
+"São Paulo, São Paulo","Florianópolis, Santa Catarina",-23.550651,-46.633382,-27.5973,-48.54961,489.269169
+"João Pessoa, Paraíba",Guarapuava,-7.121598,-34.882028,-25.390708,-51.462754,2687.814995
+Guarapuava,"João Pessoa, Paraíba",-25.390708,-51.462754,-7.121598,-34.882028,2687.814995
+"Salvador, Bahia","Natal, Rio Grande do Norte",-12.98225,-38.481277,-5.805398,-35.20809,874.9896
+"Natal, Rio Grande do Norte","Salvador, Bahia",-5.805398,-35.20809,-12.98225,-38.481277,874.9896
+"Salvador, Bahia","Belém, Pará",-12.98225,-38.481277,-1.45056,-48.468245,1689.262215
+"Belém, Pará","Salvador, Bahia",-1.45056,-48.468245,-12.98225,-38.481277,1689.262215
+"João Pessoa, Paraíba","Maceió, Alagoas",-7.121598,-34.882028,-9.647684,-35.733926,296.106232
+"Maceió, Alagoas","João Pessoa, Paraíba",-9.647684,-35.733926,-7.121598,-34.882028,296.106232
+"João Pessoa, Paraíba",Beijing,-7.121598,-34.882028,39.904211,116.407395,15383.134731
+"Recife, Pernambuco",Guarulhos,-8.058493,-34.884819,-23.454237,-46.533745,2114.892958
+"Vitória, Espírito Santo","João Pessoa, Paraíba",-20.320092,-40.337668,-7.121598,-34.882028,1580.931702
+"São Paulo, São Paulo","Recife, Pernambuco",-23.550651,-46.633382,-8.058493,-34.884819,2129.593114
+Uberlândia,"João Pessoa, Paraíba",-18.914602,-48.275332,-7.121598,-34.882028,1953.409866
+"João Pessoa, Paraíba",Uberlândia,-7.121598,-34.882028,-18.914602,-48.275332,1953.409866
+"João Pessoa, Paraíba","Aracaju, Sergipe",-7.121598,-34.882028,-10.916206,-37.077466,485.944585
+"Aracaju, Sergipe","João Pessoa, Paraíba",-10.916206,-37.077466,-7.121598,-34.882028,485.944585
+"São Paulo, São Paulo",Campina Grande,-23.550651,-46.633382,-7.222378,-35.873439,2148.449614
+Campina Grande,"São Paulo, São Paulo",-7.222378,-35.873439,-23.550651,-46.633382,2148.449614
+"Natal, Rio Grande do Norte","Rio de Janeiro, Rio de Janeiro",-5.805398,-35.20809,-22.911014,-43.209373,2086.628596
+"Rio de Janeiro, Rio de Janeiro","Natal, Rio Grande do Norte",-22.911014,-43.209373,-5.805398,-35.20809,2086.628596
+"João Pessoa, Paraíba",Vitória da Conquista,-7.121598,-34.882028,-14.861923,-40.844498,1078.717388
+Vitória da Conquista,"João Pessoa, Paraíba",-14.861923,-40.844498,-7.121598,-34.882028,1078.717388
+Niterói,"João Pessoa, Paraíba",-22.883696,-43.103739,-7.121598,-34.882028,1961.002609
+"João Pessoa, Paraíba",Niterói,-7.121598,-34.882028,-22.883696,-43.103739,1961.002609
+"Maceió, Alagoas","Recife, Pernambuco",-9.647684,-35.733926,-8.058493,-34.884819,199.822736
+"Recife, Pernambuco","Maceió, Alagoas",-8.058493,-34.884819,-9.647684,-35.733926,199.822736
+"Recife, Pernambuco",Imperatriz,-8.058493,-34.884819,-5.518873,-47.478099,1418.721811
+Imperatriz,"Recife, Pernambuco",-5.518873,-47.478099,-8.058493,-34.884819,1418.721811
+"Florianópolis, Santa Catarina","Recife, Pernambuco",-27.5973,-48.54961,-8.058493,-34.884819,2604.796188
+"Recife, Pernambuco","Florianópolis, Santa Catarina",-8.058493,-34.884819,-27.5973,-48.54961,2604.796188
+Niterói,"Rio de Janeiro, Rio de Janeiro",-22.883696,-43.103739,-22.911014,-43.209373,11.238635
+"Recife, Pernambuco","São Paulo, São Paulo",-8.058493,-34.884819,-23.550651,-46.633382,2129.593114
+Juiz de Fora,"João Pessoa, Paraíba",-21.760001,-43.34013,-7.121598,-34.882028,1863.725028
+"João Pessoa, Paraíba",Juiz de Fora,-7.121598,-34.882028,-21.760001,-43.34013,1863.725028
+"Recife, Pernambuco","Belo Horizonte, Minas Gerais",-8.058493,-34.884819,-19.922732,-43.945095,1640.692859
+"Belo Horizonte, Minas Gerais","Recife, Pernambuco",-19.922732,-43.945095,-8.058493,-34.884819,1640.692859
+"Belo Horizonte, Minas Gerais","Belo Horizonte, Minas Gerais",-19.922732,-43.945095,-19.922732,-43.945095,0.0
+Ilhéus,"João Pessoa, Paraíba",-14.793504,-39.046346,-7.121598,-34.882028,966.469175
+"João Pessoa, Paraíba",Ilhéus,-7.121598,-34.882028,-14.793504,-39.046346,966.469175
+Davis - Califórnia,"João Pessoa, Paraíba",38.543553,-121.739005,-7.121598,-34.882028,10228.647474
+"João Pessoa, Paraíba",Davis - Califórnia,-7.121598,-34.882028,38.543553,-121.739005,10228.647474
+"João Pessoa, Paraíba",Caxias do Sul,-7.121598,-34.882028,-29.163384,-51.179611,2986.9932
+Caxias do Sul,"João Pessoa, Paraíba",-29.163384,-51.179611,-7.121598,-34.882028,2986.9932
+"Palmas, Tocantins","João Pessoa, Paraíba",-10.183785,-48.333642,-7.121598,-34.882028,1517.164662
+"João Pessoa, Paraíba","Palmas, Tocantins",-7.121598,-34.882028,-10.183785,-48.333642,1517.164662
+Guayaquil,"Recife, Pernambuco",-2.289517,-80.098389,-8.058493,-34.884819,5044.667656
+"Recife, Pernambuco",Guayaquil,-8.058493,-34.884819,-2.289517,-80.098389,5044.667656
+Porto Seguro,"João Pessoa, Paraíba",-16.44394,-39.06458,-7.121598,-34.882028,1131.941372
+"João Pessoa, Paraíba",Porto Seguro,-7.121598,-34.882028,-16.44394,-39.06458,1131.941372
+"Recife, Pernambuco","Aracaju, Sergipe",-8.058493,-34.884819,-10.916206,-37.077466,398.483487
+"Aracaju, Sergipe","Recife, Pernambuco",-10.916206,-37.077466,-8.058493,-34.884819,398.483487
+"São Paulo, São Paulo","Brasília, Distrito Federal",-23.550651,-46.633382,-15.793987,-47.8828,872.345545
+Campina Grande,"São Luís, Maranhão",-7.222378,-35.873439,-2.529526,-44.296394,1068.948702
+"Recife, Pernambuco",Campinas,-8.058493,-34.884819,-22.905822,-47.06635,2101.762311
+"Belo Horizonte, Minas Gerais",São João Del Rei,-19.922732,-43.945095,-21.133576,-44.258809,138.546031
+Ouro Preto,"João Pessoa, Paraíba",-20.380046,-43.512414,-7.121598,-34.882028,1742.901758
+"Macapá, Amapá","João Pessoa, Paraíba",0.040153,-51.056959,-7.121598,-34.882028,1962.742429
+"João Pessoa, Paraíba","Macapá, Amapá",-7.121598,-34.882028,0.040153,-51.056959,1962.742429
+"Barcelona, Espanha","Recife, Pernambuco",41.38258,2.177073,-8.058493,-34.884819,6670.576296
+"Recife, Pernambuco","Barcelona, Espanha",-8.058493,-34.884819,41.38258,2.177073,6670.576296
+Campinas,Petrolina,-22.905822,-47.06635,-9.389091,-40.503061,1657.559819
+Petrolina,Campinas,-9.389091,-40.503061,-22.905822,-47.06635,1657.559819
+"João Pessoa, Paraíba",Chapecó,-7.121598,-34.882028,-27.100919,-52.615641,2904.868038
+Chapecó,"João Pessoa, Paraíba",-27.100919,-52.615641,-7.121598,-34.882028,2904.868038
+Joinville,"João Pessoa, Paraíba",-26.304978,-48.849098,-7.121598,-34.882028,2595.251821
+"João Pessoa, Paraíba",Joinville,-7.121598,-34.882028,-26.304978,-48.849098,2595.251821
+Ji-Paraná,"João Pessoa, Paraíba",-10.87815,-61.932608,-7.121598,-34.882028,2998.825306
+"João Pessoa, Paraíba",Ji-Paraná,-7.121598,-34.882028,-10.87815,-61.932608,2998.825306
+"Fortaleza, Ceará","Aracaju, Sergipe",-3.730451,-38.521799,-10.916206,-37.077466,814.721602
+"Aracaju, Sergipe","Fortaleza, Ceará",-10.916206,-37.077466,-3.730451,-38.521799,814.721602
+"Boa Vista, Roraima","João Pessoa, Paraíba",2.820848,-60.671958,-7.121598,-34.882028,3068.133583
+"João Pessoa, Paraíba","Boa Vista, Roraima",-7.121598,-34.882028,2.820848,-60.671958,3068.133583
+"João Pessoa, Paraíba","Teresina, Piauí",-7.121598,-34.882028,-5.087461,-42.804957,904.670141
+"Teresina, Piauí","João Pessoa, Paraíba",-5.087461,-42.804957,-7.121598,-34.882028,904.670141
+"João Pessoa, Paraíba",Ribeirão Preto,-7.121598,-34.882028,-21.170392,-47.810275,2090.775892
+Ribeirão Preto,"João Pessoa, Paraíba",-21.170392,-47.810275,-7.121598,-34.882028,2090.775892
+"João Pessoa, Paraíba",Ouro Preto,-7.121598,-34.882028,-20.380046,-43.512414,1742.901758
+Ouro Preto,"Belo Horizonte, Minas Gerais",-20.380046,-43.512414,-19.922732,-43.945095,68.013568
+São João Del Rei,Ouro Preto,-21.133576,-44.258809,-20.380046,-43.512414,114.207965
+"João Pessoa, Paraíba",Lisboa,-7.121598,-34.882028,38.722252,-9.139337,5748.746997
+Lisboa,"João Pessoa, Paraíba",38.722252,-9.139337,-7.121598,-34.882028,5748.746997
+"Brasília, Distrito Federal","Belo Horizonte, Minas Gerais",-15.793987,-47.8828,-19.922732,-43.945095,619.959043
+Barreiras,"João Pessoa, Paraíba",-12.144302,-44.997202,-7.121598,-34.882028,1241.220306
+"João Pessoa, Paraíba",Barreiras,-7.121598,-34.882028,-12.144302,-44.997202,1241.220306
+"João Pessoa, Paraíba",Valencia,-7.121598,-34.882028,39.469908,-0.376288,6278.731643
+Valencia,"João Pessoa, Paraíba",39.469908,-0.376288,-7.121598,-34.882028,6278.731643
+"Recife, Pernambuco","Fortaleza, Ceará",-8.058493,-34.884819,-3.730451,-38.521799,627.178745
+"Fortaleza, Ceará","Recife, Pernambuco",-3.730451,-38.521799,-8.058493,-34.884819,627.178745
+"Porto Alegre, Rio Grande do Sul",Campina Grande,-30.0325,-51.230377,-7.222378,-35.873439,3000.552397
+Foz do Iguaçu,Campina Grande,-25.54321,-54.583145,-7.222378,-35.873439,2843.965379
+Campina Grande,Foz do Iguaçu,-7.222378,-35.873439,-25.54321,-54.583145,2843.965379
+"Salvador, Bahia",Campina Grande,-12.98225,-38.481277,-7.222378,-35.873439,701.159516
+Campina Grande,"Brasília, Distrito Federal",-7.222378,-35.873439,-15.793987,-47.8828,1617.668448
+"São Paulo, São Paulo","Natal, Rio Grande do Norte",-23.550651,-46.633382,-5.805398,-35.20809,2321.398721
+Guarulhos,Doha,-23.454237,-46.533745,25.285633,51.526416,11857.509044
+Doha,Guarulhos,25.285633,51.526416,-23.454237,-46.533745,11857.509044
+Pequim,Doha,40.190632,116.412144,25.285633,51.526416,6152.8169
+Guarulhos,Guarulhos,-23.454237,-46.533745,-23.454237,-46.533745,0.0
+Doha,Pequim,25.285633,51.526416,40.190632,116.412144,6152.8169
+Doha,Doha,25.285633,51.526416,25.285633,51.526416,0.0
+"Florianópolis, Santa Catarina",Campina Grande,-27.5973,-48.54961,-7.222378,-35.873439,2629.88881
+Campinas,"Recife, Pernambuco",-22.905822,-47.06635,-8.058493,-34.884819,2101.762311
+Roma,"Recife, Pernambuco",41.896707,12.482202,-8.058493,-34.884819,7347.095088
+Rhodes,Atenas,48.758438,6.898518,37.975565,23.734832,1806.48879
+Lisboa,Rhodes,38.722252,-9.139337,48.758438,6.898518,1698.321145
+Atenas,Roma,37.975565,23.734832,41.896707,12.482202,1052.717171
+"João Pessoa, Paraíba",Columbus - Ohio,-7.121598,-34.882028,39.961176,-82.998794,7188.799491
+Columbus - Ohio,Nova York,39.961176,-82.998794,40.712728,-74.006015,766.438083
+Nova York,"João Pessoa, Paraíba",40.712728,-74.006015,-7.121598,-34.882028,6652.307496
+"Natal, Rio Grande do Norte",Londres,-5.805398,-35.20809,51.507446,-0.127765,7192.827686
+Londres,"Natal, Rio Grande do Norte",51.507446,-0.127765,-5.805398,-35.20809,7192.827686
+"Natal, Rio Grande do Norte","São Paulo, São Paulo",-5.805398,-35.20809,-23.550651,-46.633382,2321.398721
+Campinas,Águas de Lindóia,-22.905822,-47.06635,-22.473781,-46.631837,65.535897
+Águas de Lindóia,Campinas,-22.473781,-46.631837,-22.905822,-47.06635,65.535897
+"Brasília, Distrito Federal","Rio de Janeiro, Rio de Janeiro",-15.793987,-47.8828,-22.911014,-43.209373,930.7164
+Campinas,São Carlos,-22.905822,-47.06635,-22.017866,-47.886374,129.80434
+"Manaus, Amazonas","Florianópolis, Santa Catarina",-3.200177,-59.498929,-27.5973,-48.54961,2951.488354
+Campina Grande,"Florianópolis, Santa Catarina",-7.222378,-35.873439,-27.5973,-48.54961,2629.88881
+"Porto Alegre, Rio Grande do Sul",Caxias do Sul,-30.0325,-51.230377,-29.163384,-51.179611,96.765839
+"Florianópolis, Santa Catarina","Porto Alegre, Rio Grande do Sul",-27.5973,-48.54961,-30.0325,-51.230377,376.184435
+"João Pessoa, Paraíba",Canoas,-7.121598,-34.882028,-29.913238,-51.186134,3053.438223
+Canoas,"João Pessoa, Paraíba",-29.913238,-51.186134,-7.121598,-34.882028,3053.438223
+"Florianópolis, Santa Catarina",Pelotas,-27.5973,-48.54961,-31.765377,-52.337528,590.408297
+Pelotas,"Florianópolis, Santa Catarina",-31.765377,-52.337528,-27.5973,-48.54961,590.408297
+"Florianópolis, Santa Catarina","Florianópolis, Santa Catarina",-27.5973,-48.54961,-27.5973,-48.54961,0.0
+"Rio de Janeiro, Rio de Janeiro","Recife, Pernambuco",-22.911014,-43.209373,-8.058493,-34.884819,1875.550535
+Paris,"Rio de Janeiro, Rio de Janeiro",48.857548,2.351376,-22.911014,-43.209373,9169.638254
+Paris,Dublin,48.857548,2.351376,53.34938,-6.260559,780.751792
+Edimburgo,Dublin,55.953346,-3.188375,53.34938,-6.260559,350.494211
+Dublin,Edimburgo,53.34938,-6.260559,55.953346,-3.188375,350.494211
+Dublin,Paris,53.34938,-6.260559,48.857548,2.351376,780.751792
+"São Paulo, São Paulo",Paris,-23.550651,-46.633382,48.857548,2.351376,9401.943257
+Foz do Iguaçu,"Recife, Pernambuco",-25.54321,-54.583145,-8.058493,-34.884819,2851.215635
+"Recife, Pernambuco",Foz do Iguaçu,-8.058493,-34.884819,-25.54321,-54.583145,2851.215635
+"Natal, Rio Grande do Norte","Florianópolis, Santa Catarina",-5.805398,-35.20809,-27.5973,-48.54961,2803.362943
+"Florianópolis, Santa Catarina","Natal, Rio Grande do Norte",-27.5973,-48.54961,-5.805398,-35.20809,2803.362943
+Navegantes,"João Pessoa, Paraíba",-26.894775,-48.655017,-7.121598,-34.882028,2636.411542
+"João Pessoa, Paraíba",Navegantes,-7.121598,-34.882028,-26.894775,-48.655017,2636.411542
+San Francisco - Califórnia,"São Paulo, São Paulo",37.779259,-122.419329,-23.550651,-46.633382,10433.892139
+"São Paulo, São Paulo",San Francisco - Califórnia,-23.550651,-46.633382,37.779259,-122.419329,10433.892139
+Phoenix,"São Paulo, São Paulo",33.448437,-112.074141,-23.550651,-46.633382,9384.230254
+"São Paulo, São Paulo",Phoenix,-23.550651,-46.633382,33.448437,-112.074141,9384.230254
+Roma,"São Paulo, São Paulo",41.896707,12.482202,-23.550651,-46.633382,9475.365044
+"São Paulo, São Paulo",Roma,-23.550651,-46.633382,41.896707,12.482202,9475.365044
+"João Pessoa, Paraíba",Uberaba,-7.121598,-34.882028,-19.747669,-47.93847,1988.749683
+Uberaba,"João Pessoa, Paraíba",-19.747669,-47.93847,-7.121598,-34.882028,1988.749683
+DENVER,Newark - New Jersey,39.739236,-104.984862,40.735657,-74.172367,2604.365702
+"São Paulo, São Paulo",Edmonton,-23.550651,-46.633382,53.546206,-113.491241,10692.548144
+Edmonton,DENVER,53.546206,-113.491241,39.739236,-104.984862,1664.146459
+Newark - New Jersey,"São Paulo, São Paulo",40.735657,-74.172367,-23.550651,-46.633382,7694.245287
+"São Paulo, São Paulo",Los Angeles,-23.550651,-46.633382,34.053691,-118.242766,9906.383776
+Los Angeles,"São Paulo, São Paulo",34.053691,-118.242766,-23.550651,-46.633382,9906.383776
+Calgary,Los Angeles,51.045606,-114.057541,34.053691,-118.242766,1919.465089
+Los Angeles,Calgary,34.053691,-118.242766,51.045606,-114.057541,1919.465089
+"São Paulo, São Paulo",Lima,-23.550651,-46.633382,-23.92396,-56.519794,1006.967498
+Atlanta,"São Paulo, São Paulo",33.754466,-84.389815,-23.550651,-46.633382,7520.144028
+Los Angeles,Atlanta,34.053691,-118.242766,33.754466,-84.389815,3109.949118
+Lima,Los Angeles,-23.92396,-56.519794,34.053691,-118.242766,9166.08094
+"Natal, Rio Grande do Norte","Belém, Pará",-5.805398,-35.20809,-1.45056,-48.468245,1548.78094
+"Belém, Pará","Natal, Rio Grande do Norte",-1.45056,-48.468245,-5.805398,-35.20809,1548.78094
+"Natal, Rio Grande do Norte","João Pessoa, Paraíba",-5.805398,-35.20809,-7.121598,-34.882028,150.723376
+"João Pessoa, Paraíba","Natal, Rio Grande do Norte",-7.121598,-34.882028,-5.805398,-35.20809,150.723376
+Ilhéus,"Florianópolis, Santa Catarina",-14.793504,-39.046346,-27.5973,-48.54961,1729.590313
+"Florianópolis, Santa Catarina","Salvador, Bahia",-27.5973,-48.54961,-12.98225,-38.481277,1932.584841
+"São Luís, Maranhão","São Luís, Maranhão",-2.529526,-44.296394,-2.529526,-44.296394,0.0
+"Brasília, Distrito Federal","Goiânia, Goiás",-15.793987,-47.8828,-16.680882,-49.253269,176.441856
+"Goiânia, Goiás",Areia,-16.680882,-49.253269,-6.965373,-35.702606,1826.410869
+Areia,"Campo Grande, Mato Grosso do Sul",-6.965373,-35.702606,-20.464017,-54.616295,2530.292646
+São José dos Campos,"João Pessoa, Paraíba",-23.190034,-45.884508,-7.121598,-34.882028,2139.010953
+"João Pessoa, Paraíba",São José dos Campos,-7.121598,-34.882028,-23.190034,-45.884508,2139.010953
+Campinas,Campina Grande,-22.905822,-47.06635,-7.222378,-35.873439,2115.258074
+"Rio de Janeiro, Rio de Janeiro","São Paulo, São Paulo",-22.911014,-43.209373,-23.550651,-46.633382,357.009541
+Campina Grande,"Rio de Janeiro, Rio de Janeiro",-7.222378,-35.873439,-22.911014,-43.209373,1912.829344
+"São Paulo, São Paulo",Campinas,-23.550651,-46.633382,-22.905822,-47.06635,84.251938
+"Cuiabá, Mato Grosso",Campina Grande,-15.598669,-56.09913,-7.222378,-35.873439,2390.768526
+Caxias do Sul,"Recife, Pernambuco",-29.163384,-51.179611,-8.058493,-34.884819,2899.80447
+"Recife, Pernambuco",Caxias do Sul,-8.058493,-34.884819,-29.163384,-51.179611,2899.80447
+"Rio de Janeiro, Rio de Janeiro","Brasília, Distrito Federal",-22.911014,-43.209373,-15.793987,-47.8828,930.7164
+"Goiânia, Goiás","Recife, Pernambuco",-16.680882,-49.253269,-8.058493,-34.884819,1829.993185
+"Recife, Pernambuco","Goiânia, Goiás",-8.058493,-34.884819,-16.680882,-49.253269,1829.993185
+"Recife, Pernambuco","Curitiba, Paraná",-8.058493,-34.884819,-25.494438,-49.284271,2466.732499
+"Curitiba, Paraná","Recife, Pernambuco",-25.494438,-49.284271,-8.058493,-34.884819,2466.732499
+Bento Gonçalves,"João Pessoa, Paraíba",-29.16669,-51.516928,-7.121598,-34.882028,3007.604016
+"João Pessoa, Paraíba",Bento Gonçalves,-7.121598,-34.882028,-29.16669,-51.516928,3007.604016
+Balneário Camboriú,"João Pessoa, Paraíba",-26.993077,-48.635576,-7.121598,-34.882028,2644.136605
+"João Pessoa, Paraíba",Balneário Camboriú,-7.121598,-34.882028,-26.993077,-48.635576,2644.136605
+Presidente Prudente,"João Pessoa, Paraíba",-22.121117,-51.392952,-7.121598,-34.882028,2431.967944
+"João Pessoa, Paraíba",Presidente Prudente,-7.121598,-34.882028,-22.121117,-51.392952,2431.967944
+"Florianópolis, Santa Catarina","Brasília, Distrito Federal",-27.5973,-48.54961,-15.793987,-47.8828,1314.266035
+"Recife, Pernambuco",Miami,-8.058493,-34.884819,25.774173,-80.19362,6173.609785
+Miami,"Recife, Pernambuco",25.774173,-80.19362,-8.058493,-34.884819,6173.609785
+Porto,"Recife, Pernambuco",-3.891715,-42.711528,-8.058493,-34.884819,981.587395
+"Recife, Pernambuco",Porto,-8.058493,-34.884819,-3.891715,-42.711528,981.587395
+"Recife, Pernambuco",Petrolina,-8.058493,-34.884819,-9.389091,-40.503061,634.950873
+Petrolina,"Recife, Pernambuco",-9.389091,-40.503061,-8.058493,-34.884819,634.950873
+Guimarães,Porto,-2.134442,-44.6056,-3.891715,-42.711528,287.075081
+Lisboa,Porto,38.722252,-9.139337,-3.891715,-42.711528,5859.167919
+Lisboa,Lisboa,38.722252,-9.139337,38.722252,-9.139337,0.0
+Porto,Guimarães,-3.891715,-42.711528,-2.134442,-44.6056,287.075081
+Porto,Lisboa,-3.891715,-42.711528,38.722252,-9.139337,5859.167919
+"Florianópolis, Santa Catarina",Petrolina,-27.5973,-48.54961,-9.389091,-40.503061,2193.402383
+Petrolina,"Florianópolis, Santa Catarina",-9.389091,-40.503061,-27.5973,-48.54961,2193.402383
+"João Pessoa, Paraíba",Cáceres,-7.121598,-34.882028,-16.076846,-57.682243,2672.40993
+Cáceres,"João Pessoa, Paraíba",-16.076846,-57.682243,-7.121598,-34.882028,2672.40993
+"Vitória, Espírito Santo","Brasília, Distrito Federal",-20.320092,-40.337668,-15.793987,-47.8828,942.88167
+"São Paulo, São Paulo","Salvador, Bahia",-23.550651,-46.633382,-12.98225,-38.481277,1455.691042
+"Manaus, Amazonas","Recife, Pernambuco",-3.200177,-59.498929,-8.058493,-34.884819,2775.792279
+"Recife, Pernambuco","Manaus, Amazonas",-8.058493,-34.884819,-3.200177,-59.498929,2775.792279
+Seropédica,"João Pessoa, Paraíba",-22.753068,-43.715858,-7.121598,-34.882028,1978.629754
+"João Pessoa, Paraíba",Seropédica,-7.121598,-34.882028,-22.753068,-43.715858,1978.629754
+"João Pessoa, Paraíba",Madri,-7.121598,-34.882028,40.416775,-3.70379,6174.642326
+Madri,"João Pessoa, Paraíba",40.416775,-3.70379,-7.121598,-34.882028,6174.642326
+"João Pessoa, Paraíba",Havana,-7.121598,-34.882028,23.135305,-82.358963,6158.784933
+Havana,"João Pessoa, Paraíba",23.135305,-82.358963,-7.121598,-34.882028,6158.784933
+Kansas City - Missouri,"João Pessoa, Paraíba",39.100105,-94.578142,-7.121598,-34.882028,7996.954125
+"João Pessoa, Paraíba",Kansas City - Missouri,-7.121598,-34.882028,39.100105,-94.578142,7996.954125
+Washington,"João Pessoa, Paraíba",38.907192,-77.036871,-7.121598,-34.882028,6711.607832
+"João Pessoa, Paraíba",Washington,-7.121598,-34.882028,38.907192,-77.036871,6711.607832
+"Recife, Pernambuco",Londres,-8.058493,-34.884819,51.507446,-0.127765,7409.453884
+Dallas,"João Pessoa, Paraíba",32.776272,-96.796856,-7.121598,-34.882028,7894.211448
+"Recife, Pernambuco",Uberlândia,-8.058493,-34.884819,-18.914602,-48.275332,1883.007315
+Uberlândia,"Recife, Pernambuco",-18.914602,-48.275332,-8.058493,-34.884819,1883.007315
+"João Pessoa, Paraíba",Assunção,-7.121598,-34.882028,-7.07501,-36.731368,204.126751
+Assunção,"São Paulo, São Paulo",-7.07501,-36.731368,-23.550651,-46.633382,2115.248567
+"São Paulo, São Paulo",Foz do Iguaçu,-23.550651,-46.633382,-25.54321,-54.583145,833.876984
+Foz do Iguaçu,"São Paulo, São Paulo",-25.54321,-54.583145,-23.550651,-46.633382,833.876984
+"Natal, Rio Grande do Norte",Lisboa,-5.805398,-35.20809,38.722252,-9.139337,5632.906832
+Lisboa,"Natal, Rio Grande do Norte",38.722252,-9.139337,-5.805398,-35.20809,5632.906832
+"Vitória, Espírito Santo","Belo Horizonte, Minas Gerais",-20.320092,-40.337668,-19.922732,-43.945095,379.219446
+Lisboa,Funchal,38.722252,-9.139337,32.64965,-16.908678,973.083691
+Funchal,Lisboa,32.64965,-16.908678,38.722252,-9.139337,973.083691
+"Goiânia, Goiás","Goiânia, Goiás",-16.680882,-49.253269,-16.680882,-49.253269,0.0
+"Fortaleza, Ceará","Natal, Rio Grande do Norte",-3.730451,-38.521799,-5.805398,-35.20809,433.645461
+"Natal, Rio Grande do Norte","Fortaleza, Ceará",-5.805398,-35.20809,-3.730451,-38.521799,433.645461
+"Vitória, Espírito Santo","Fortaleza, Ceará",-20.320092,-40.337668,-3.730451,-38.521799,1855.141059
+"Fortaleza, Ceará","Vitória, Espírito Santo",-3.730451,-38.521799,-20.320092,-40.337668,1855.141059
+Juiz de Fora,"Brasília, Distrito Federal",-21.760001,-43.34013,-15.793987,-47.8828,817.623528
+Campinas,"Vitória, Espírito Santo",-22.905822,-47.06635,-20.320092,-40.337668,752.542227
+"Curitiba, Paraná","Curitiba, Paraná",-25.494438,-49.284271,-25.494438,-49.284271,0.0
+"Recife, Pernambuco",Washington,-8.058493,-34.884819,38.907192,-77.036871,6794.869997
+Washington,"Recife, Pernambuco",38.907192,-77.036871,-8.058493,-34.884819,6794.869997
+"João Pessoa, Paraíba",Montes Claros,-7.121598,-34.882028,-16.728638,-43.858173,1446.45038
+Montes Claros,"João Pessoa, Paraíba",-16.728638,-43.858173,-7.121598,-34.882028,1446.45038
+"Vitória, Espírito Santo","Natal, Rio Grande do Norte",-20.320092,-40.337668,-5.805398,-35.20809,1706.356758
+"Natal, Rio Grande do Norte","Vitória, Espírito Santo",-5.805398,-35.20809,-20.320092,-40.337668,1706.356758
+Medellín,"João Pessoa, Paraíba",6.269732,-75.60256,-7.121598,-34.882028,4756.457793
+"João Pessoa, Paraíba",Medellín,-7.121598,-34.882028,6.269732,-75.60256,4756.457793
+"Aracaju, Sergipe",Santa Maria,-10.916206,-37.077466,-5.838433,-35.691702,584.826629
+"Belo Horizonte, Minas Gerais","São Paulo, São Paulo",-19.922732,-43.945095,-23.550651,-46.633382,489.690412
+"Recife, Pernambuco",Bruxelas,-8.058493,-34.884819,50.846557,4.351697,7555.051789
+Bruxelas,"Recife, Pernambuco",50.846557,4.351697,-8.058493,-34.884819,7555.051789
+"João Pessoa, Paraíba",Glasgow,-7.121598,-34.882028,55.86167,-4.258334,7547.649704
+Glasgow,"João Pessoa, Paraíba",55.86167,-4.258334,-7.121598,-34.882028,7547.649704
+"Teresina, Piauí","Recife, Pernambuco",-5.087461,-42.804957,-8.058493,-34.884819,935.082272
+"Recife, Pernambuco","Teresina, Piauí",-8.058493,-34.884819,-5.087461,-42.804957,935.082272
+Santarém,"Recife, Pernambuco",-6.484033,-38.476707,-8.058493,-34.884819,433.132414
+"Recife, Pernambuco",Santarém,-8.058493,-34.884819,-6.484033,-38.476707,433.132414
+"Brasília, Distrito Federal","São Paulo, São Paulo",-15.793987,-47.8828,-23.550651,-46.633382,872.345545
+"João Pessoa, Paraíba","Rio Branco, Acre",-7.121598,-34.882028,-9.976536,-67.822078,3634.418166
+"Rio Branco, Acre","João Pessoa, Paraíba",-9.976536,-67.822078,-7.121598,-34.882028,3634.418166
+"João Pessoa, Paraíba",Paris,-7.121598,-34.882028,48.857548,2.351376,7200.867021
+Paris,"João Pessoa, Paraíba",48.857548,2.351376,-7.121598,-34.882028,7200.867021
+"Recife, Pernambuco",Uberaba,-8.058493,-34.884819,-19.747669,-47.93847,1914.671302
+Uberaba,"Recife, Pernambuco",-19.747669,-47.93847,-8.058493,-34.884819,1914.671302
+"Brasília, Distrito Federal","Palmas, Tocantins",-15.793987,-47.8828,-10.183785,-48.333642,625.733825
+Campina Grande,"Belo Horizonte, Minas Gerais",-7.222378,-35.873439,-19.922732,-43.945095,1658.856312
+"Belo Horizonte, Minas Gerais",Campina Grande,-19.922732,-43.945095,-7.222378,-35.873439,1658.856312
+"Belo Horizonte, Minas Gerais",Bananeiras,-19.922732,-43.945095,-6.74435,-35.630895,1718.223497
+"Recife, Pernambuco",Juazeiro do Norte,-8.058493,-34.884819,-7.219288,-39.316244,497.207455
+Juazeiro do Norte,"Recife, Pernambuco",-7.219288,-39.316244,-8.058493,-34.884819,497.207455
+"Brasília, Distrito Federal","Natal, Rio Grande do Norte",-15.793987,-47.8828,-5.805398,-35.20809,1773.276295
+"Natal, Rio Grande do Norte","Brasília, Distrito Federal",-5.805398,-35.20809,-15.793987,-47.8828,1773.276295
+Imperatriz,"João Pessoa, Paraíba",-5.518873,-47.478099,-7.121598,-34.882028,1403.386854
+"João Pessoa, Paraíba",Imperatriz,-7.121598,-34.882028,-5.518873,-47.478099,1403.386854
+"Brasília, Distrito Federal",Campina Grande,-15.793987,-47.8828,-7.222378,-35.873439,1617.668448
+"Recife, Pernambuco",Joinville,-8.058493,-34.884819,-26.304978,-48.849098,2508.418502
+Joinville,"Recife, Pernambuco",-26.304978,-48.849098,-8.058493,-34.884819,2508.418502
+Campina Grande,"Curitiba, Paraná",-7.222378,-35.873439,-25.494438,-49.284271,2480.4651
+Campina Grande,"Maceió, Alagoas",-7.222378,-35.873439,-9.647684,-35.733926,270.117961
+Uberlândia,"Natal, Rio Grande do Norte",-18.914602,-48.275332,-5.805398,-35.20809,2031.956801
+Goiás,"João Pessoa, Paraíba",-15.940847,-50.143352,-7.121598,-34.882028,1928.612399
+"João Pessoa, Paraíba",Goiás,-7.121598,-34.882028,-15.940847,-50.143352,1928.612399

@@ -189,7 +189,7 @@ class Distancia:
     def calcular_haversine(lat1, lon1, lat2, lon2):
         """
         Calcula a Distância Haversine (GCD) de forma vetorizada (usando NumPy).
-        O resultado é o valor float completo, sem arredondamento.
+        O resultado é arredondado para o inteiro mais próximo (em km).
         """
         R = 6371.0 # Raio da Terra em km
         
@@ -199,9 +199,13 @@ class Distancia:
         dlon = lon2 - lon1
         dlat = lat2 - lat1
 
-        # Fórmula Haversine
-        a = np.sin(dlat / 2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2)**2
-        c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
+        # Lei Esférica dos Cossenos
+        cos_c = np.sin(lat1) * np.sin(lat2) + np.cos(lat1) * np.cos(lat2) * np.cos(dlon)
+        
+        # Limita o argumento do arccos entre [-1, 1] (para estabilidade numérica)
+        cos_c = np.clip(cos_c, -1.0, 1.0)
+        
+        c = np.arccos(cos_c) # Ângulo central em radianos
         
         distancia_km = R * c
         
