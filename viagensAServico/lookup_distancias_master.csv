@@ -365,3 +365,100 @@ Campina Grande,"Maceió, Alagoas",-7.222378,-35.873439,-9.647684,-35.733926,270.
 Uberlândia,"Natal, Rio Grande do Norte",-18.914602,-48.275332,-5.805398,-35.20809,2031.956801
 Goiás,"João Pessoa, Paraíba",-15.940847,-50.143352,-7.121598,-34.882028,1928.612399
 "João Pessoa, Paraíba",Goiás,-7.121598,-34.882028,-15.940847,-50.143352,1928.612399
+"Cascavel, Paraná","João Pessoa, Paraíba",-24.9555,-53.456054,-7.121598,-34.882028,2798.195329
+"João Pessoa, Paraíba","Cascavel, Paraná",-7.121598,-34.882028,-24.9555,-53.456054,2798.195329
+Pelotas,"Recife, Pernambuco",-31.765377,-52.337528,-8.058493,-34.884819,3195.07325
+"Recife, Pernambuco",Pelotas,-8.058493,-34.884819,-31.765377,-52.337528,3195.07325
+"São Luís, Maranhão",Campina Grande,-2.529526,-44.296394,-7.222378,-35.873439,1068.948702
+Santa Rita,"São Paulo, São Paulo",-7.151193,-34.970712,-23.550651,-46.633382,2208.093729
+"São Paulo, São Paulo",Santa Rita,-23.550651,-46.633382,-7.151193,-34.970712,2208.093729
+"Recife, Pernambuco","Macapá, Amapá",-8.058493,-34.884819,0.040153,-51.056959,2005.82434
+Bananeiras,Juiz de Fora,-6.74435,-35.630895,-21.760001,-43.34013,1863.676542
+Juiz de Fora,Bananeiras,-21.760001,-43.34013,-6.74435,-35.630895,1863.676542
+Campina Grande,Campinas,-7.222378,-35.873439,-22.905822,-47.06635,2115.258074
+Lisboa,Évora,38.722252,-9.139337,38.570774,-7.909281,108.142795
+"Manaus, Amazonas",Juazeiro do Norte,-3.200177,-59.498929,-7.219288,-39.316244,2278.629258
+Juazeiro do Norte,"Brasília, Distrito Federal",-7.219288,-39.316244,-15.793987,-47.8828,1333.587638
+"Brasília, Distrito Federal","Fortaleza, Ceará",-15.793987,-47.8828,-3.730451,-38.521799,1687.415813
+"Fortaleza, Ceará",Campina Grande,-3.730451,-38.521799,-7.222378,-35.873439,486.48582
+Campina Grande,"Fortaleza, Ceará",-7.222378,-35.873439,-3.730451,-38.521799,486.48582
+"Brasília, Distrito Federal",Juazeiro do Norte,-15.793987,-47.8828,-7.219288,-39.316244,1333.587638
+"Porto Alegre, Rio Grande do Sul","Recife, Pernambuco",-30.0325,-51.230377,-8.058493,-34.884819,2978.3037
+"Recife, Pernambuco","Porto Alegre, Rio Grande do Sul",-8.058493,-34.884819,-30.0325,-51.230377,2978.3037
+"Florianópolis, Santa Catarina","São Paulo, São Paulo",-27.5973,-48.54961,-23.550651,-46.633382,489.269169
+Campina Grande,"Belém, Pará",-7.222378,-35.873439,-1.45056,-48.468245,1536.328477
+"Belém, Pará",Campina Grande,-1.45056,-48.468245,-7.222378,-35.873439,1536.328477
+Juazeiro do Norte,"Aracaju, Sergipe",-7.219288,-39.316244,-10.916206,-37.077466,478.951997
+"Aracaju, Sergipe",Juazeiro do Norte,-10.916206,-37.077466,-7.219288,-39.316244,478.951997
+Campina Grande,"Porto Alegre, Rio Grande do Sul",-7.222378,-35.873439,-30.0325,-51.230377,3000.552397
+Coimbra,Lisboa,-20.853984,-42.801172,38.722252,-9.139337,7495.594569
+"João Pessoa, Paraíba",Santa Maria,-7.121598,-34.882028,-5.838433,-35.691702,168.404594
+Santa Maria,"João Pessoa, Paraíba",-5.838433,-35.691702,-7.121598,-34.882028,168.404594
+"Belo Horizonte, Minas Gerais","Natal, Rio Grande do Norte",-19.922732,-43.945095,-5.805398,-35.20809,1831.911515
+"Natal, Rio Grande do Norte","Belo Horizonte, Minas Gerais",-5.805398,-35.20809,-19.922732,-43.945095,1831.911515
+"Natal, Rio Grande do Norte","São Luís, Maranhão",-5.805398,-35.20809,-2.529526,-44.296394,1071.567945
+"São Luís, Maranhão","Natal, Rio Grande do Norte",-2.529526,-44.296394,-5.805398,-35.20809,1071.567945
+"Rio de Janeiro, Rio de Janeiro",Campina Grande,-22.911014,-43.209373,-7.222378,-35.873439,1912.829344
+Juazeiro do Norte,"Maceió, Alagoas",-7.219288,-39.316244,-9.647684,-35.733926,477.64639
+"Maceió, Alagoas",Juazeiro do Norte,-9.647684,-35.733926,-7.219288,-39.316244,477.64639
+Imperatriz,Campina Grande,-5.518873,-47.478099,-7.222378,-35.873439,1296.249739
+Campina Grande,Imperatriz,-7.222378,-35.873439,-5.518873,-47.478099,1296.249739
+"Recife, Pernambuco",Valencia,-8.058493,-34.884819,39.469908,-0.376288,6367.734458
+Valencia,Lisboa,39.469908,-0.376288,38.722252,-9.139337,760.475094
+Xangai,Hong Kong,31.230416,121.473701,22.350627,114.184916,1223.258673
+Hong Kong,"João Pessoa, Paraíba",22.350627,114.184916,-7.121598,-34.882028,16295.44283
+"São Paulo, São Paulo",Xangai,-23.550651,-46.633382,31.230416,121.473701,18564.866878
+"Fortaleza, Ceará","Brasília, Distrito Federal",-3.730451,-38.521799,-15.793987,-47.8828,1687.415813
+Campina Grande,"Teresina, Piauí",-7.222378,-35.873439,-5.087461,-42.804957,802.186002
+Campina Grande,"Aracaju, Sergipe",-7.222378,-35.873439,-10.916206,-37.077466,431.480734
+Xangai,"João Pessoa, Paraíba",31.230416,121.473701,-7.121598,-34.882028,16379.393061
+"Porto Alegre, Rio Grande do Sul",Santa Maria,-30.0325,-51.230377,-5.838433,-35.691702,3144.042182
+Santa Maria,"Porto Alegre, Rio Grande do Sul",-5.838433,-35.691702,-30.0325,-51.230377,3144.042182
+Juazeiro do Norte,"Salvador, Bahia",-7.219288,-39.316244,-12.98225,-38.481277,647.292266
+"Salvador, Bahia",Juazeiro do Norte,-12.98225,-38.481277,-7.219288,-39.316244,647.292266
+"Curitiba, Paraná",Campina Grande,-25.494438,-49.284271,-7.222378,-35.873439,2480.4651
+Campina Grande,"Cuiabá, Mato Grosso",-7.222378,-35.873439,-15.598669,-56.09913,2390.768526
+Santa Marta,"João Pessoa, Paraíba",11.232094,-74.195092,-7.121598,-34.882028,4804.505059
+"João Pessoa, Paraíba",Santa Marta,-7.121598,-34.882028,11.232094,-74.195092,4804.505059
+"Fortaleza, Ceará","Manaus, Amazonas",-3.730451,-38.521799,-3.200177,-59.498929,2328.975479
+"Manaus, Amazonas","Fortaleza, Ceará",-3.200177,-59.498929,-3.730451,-38.521799,2328.975479
+"São Paulo, São Paulo",Juazeiro do Norte,-23.550651,-46.633382,-7.219288,-39.316244,1976.85066
+Juazeiro do Norte,"São Paulo, São Paulo",-7.219288,-39.316244,-23.550651,-46.633382,1976.85066
+Juazeiro do Norte,"Belo Horizonte, Minas Gerais",-7.219288,-39.316244,-19.922732,-43.945095,1498.146034
+"Belo Horizonte, Minas Gerais",Juazeiro do Norte,-19.922732,-43.945095,-7.219288,-39.316244,1498.146034
+Ribeirão Preto,Campina Grande,-21.170392,-47.810275,-7.222378,-35.873439,2012.737338
+Campina Grande,Ribeirão Preto,-7.222378,-35.873439,-21.170392,-47.810275,2012.737338
+Cidade do México,"Recife, Pernambuco",19.320772,-99.151468,-8.058493,-34.884819,7666.060315
+"Recife, Pernambuco",Cidade do México,-8.058493,-34.884819,19.320772,-99.151468,7666.060315
+Campina Grande,"Campo Grande, Mato Grosso do Sul",-7.222378,-35.873439,-20.464017,-54.616295,2497.817666
+"Campo Grande, Mato Grosso do Sul",Campina Grande,-20.464017,-54.616295,-7.222378,-35.873439,2497.817666
+"Recife, Pernambuco",Roma,-8.058493,-34.884819,41.896707,12.482202,7347.095088
+Juazeiro do Norte,Campinas,-7.219288,-39.316244,-22.905822,-47.06635,1931.217347
+Campinas,Juazeiro do Norte,-22.905822,-47.06635,-7.219288,-39.316244,1931.217347
+Campina Grande,Guarulhos,-7.222378,-35.873439,-23.454237,-46.533745,2133.880773
+Guarulhos,Campina Grande,-23.454237,-46.533745,-7.222378,-35.873439,2133.880773
+Cordoba,Juazeiro do Norte,37.884581,-4.776014,-7.219288,-39.316244,6160.504349
+Juazeiro do Norte,Cordoba,-7.219288,-39.316244,37.884581,-4.776014,6160.504349
+São José do Rio Preto,"João Pessoa, Paraíba",-20.811753,-49.376176,-7.121598,-34.882028,2179.198756
+"João Pessoa, Paraíba",São José do Rio Preto,-7.121598,-34.882028,-20.811753,-49.376176,2179.198756
+Ilhéus,"Salvador, Bahia",-14.793504,-39.046346,-12.98225,-38.481277,210.435341
+"Recife, Pernambuco",Ilhéus,-8.058493,-34.884819,-14.793504,-39.046346,875.388928
+Juazeiro do Norte,"Manaus, Amazonas",-7.219288,-39.316244,-3.200177,-59.498929,2278.629258
+"São Paulo, São Paulo","Rio de Janeiro, Rio de Janeiro",-23.550651,-46.633382,-22.911014,-43.209373,357.009541
+"Rio de Janeiro, Rio de Janeiro",Campinas,-22.911014,-43.209373,-22.905822,-47.06635,395.039201
+"Manaus, Amazonas",Campina Grande,-3.200177,-59.498929,-7.222378,-35.873439,2653.432424
+Campina Grande,"Manaus, Amazonas",-7.222378,-35.873439,-3.200177,-59.498929,2653.432424
+"Aracaju, Sergipe",Campina Grande,-10.916206,-37.077466,-7.222378,-35.873439,431.480734
+"João Pessoa, Paraíba",Passo Fundo,-7.121598,-34.882028,-28.258037,-52.409566,2986.243388
+Passo Fundo,"João Pessoa, Paraíba",-28.258037,-52.409566,-7.121598,-34.882028,2986.243388
+Juazeiro do Norte,Ilhéus,-7.219288,-39.316244,-14.793504,-39.046346,842.728587
+Juazeiro do Norte,"Porto Alegre, Rio Grande do Sul",-7.219288,-39.316244,-30.0325,-51.230377,2825.292666
+"Florianópolis, Santa Catarina",Juazeiro do Norte,-27.5973,-48.54961,-7.219288,-39.316244,2465.941068
+Juazeiro do Norte,"Fortaleza, Ceará",-7.219288,-39.316244,-3.730451,-38.521799,397.779317
+"Fortaleza, Ceará",Juazeiro do Norte,-3.730451,-38.521799,-7.219288,-39.316244,397.779317
+Campina Grande,Vitória da Conquista,-7.222378,-35.873439,-14.861923,-40.844498,1007.696611
+Vitória da Conquista,Campina Grande,-14.861923,-40.844498,-7.222378,-35.873439,1007.696611
+"Goiânia, Goiás",Campina Grande,-16.680882,-49.253269,-7.222378,-35.873439,1794.102504
+Campina Grande,"Goiânia, Goiás",-7.222378,-35.873439,-16.680882,-49.253269,1794.102504
+Juazeiro do Norte,"Vitória, Espírito Santo",-7.219288,-39.316244,-20.320092,-40.337668,1460.892198
+"Vitória, Espírito Santo",Juazeiro do Norte,-20.320092,-40.337668,-7.219288,-39.316244,1460.892198
