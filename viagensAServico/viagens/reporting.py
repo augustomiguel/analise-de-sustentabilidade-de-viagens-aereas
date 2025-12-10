@@ -5,10 +5,10 @@ import altair as alt
 import os
 import glob
 import re
+from PIL import Image
 
 class ReportGenerator:
     
-    # Constantes de Baseline Histórico (Fallback)
     BASELINE_HISTORICO_ED1_1 = 285440.323 
     BASELINE_HISTORICO_ED2_1 = 1738431.16 
     
@@ -23,98 +23,15 @@ class ReportGenerator:
         
         print(f"ReportGenerator: Pronto para relatórios do ano {self.ano}.")
 
+    # --- HELPERS DE DADOS ---
+
     def _load_master_file(self, orgao: str):
-        """Carrega o arquivo mestre para um órgão específico."""
         arquivo_master = os.path.join(self.pasta_dados_ano, f'df_master_{orgao}_aereo_{self.ano}.csv')
         try:
-            df = pd.read_csv(arquivo_master)
-            return df
+            return pd.read_csv(arquivo_master)
         except FileNotFoundError:
             print(f"   - ❌ Erro: Arquivo mestre '{arquivo_master}' não encontrado.")
             return pd.DataFrame()
-
-    def generate_monthly_report(self, orgao: str):
-        """Gera o CSV mensal."""
-        print(f"🔄 Gerando Relatório Mensal para {orgao}...")
-        df = self._load_master_file(orgao)
-        if df.empty: return
-
-        df['Data_Viagem'] = pd.to_datetime(df['Período - Data de início'], format='%d/%m/%Y', errors='coerce')
-        df.dropna(subset=['Data_Viagem'], inplace=True)
-        df['Mes_Num'] = df['Data_Viagem'].dt.month
-        df['Mes_Ano'] = df['Mes_Num'].apply(lambda x: f"{self.ano}-{x:02d}")
-        
-        for col in ['Distância (GCD)', 'Emissões (KgCO2eq)', 'Valor passagens']:
-            df[col] = pd.to_numeric(df[col].astype(str).str.replace(',', '.', regex=False), errors='coerce').fillna(0)
-
-        df_agrupado = df.groupby(['Mes_Ano', 'Mes_Num']).agg(
-            Total_Distancia_Km = ('Distância (GCD)', 'sum'),
-            Total_Emissoes_KgCO2eq = ('Emissões (KgCO2eq)', 'sum'),
-            Total_Viagens = ('Identificador do processo de viagem', 'count'),
-            Total_Passagens = ('Valor passagens', 'sum')
-        ).reset_index()
-
-        meses_template = pd.DataFrame({'Mes_Num': range(1, 13)})
-        meses_template['Mes_Ano'] = meses_template['Mes_Num'].apply(lambda x: f"{self.ano}-{x:02d}")
-        df_mensal = pd.merge(meses_template, df_agrupado, on=['Mes_Num', 'Mes_Ano'], how='left')
-        df_mensal.fillna(0, inplace=True)
-        df_mensal['Total_Viagens'] = df_mensal['Total_Viagens'].astype(int)
-
-        nome_arquivo_saida = f"relatorio_mensal_{orgao}_aereo_{self.ano}.csv"
-        caminho_saida = os.path.join(self.pasta_relatorios_mensais, nome_arquivo_saida)
-        df_mensal.round(2).to_csv(caminho_saida, index=False)
-        print(f"   - ✅ Relatório mensal salvo em: '{caminho_saida}'")
-
-    def _create_chart_with_text(self, base, y_col, y_title, y_format):
-        line = base.mark_line(point=True).encode(y=alt.Y(y_col, title=y_title))
-        text = base.mark_text(dy=-10, color='black').encode(
-            x=alt.X('Mes_Num:O'), 
-            y=alt.Y(y_col),
-            text=alt.condition(alt.datum[y_col] > 0, alt.Text(y_col, format=y_format, type='quantitative'), alt.value(''))
-        )
-        return (line + text).properties(title=f'Comparativo Institucional de {y_title}')
-
-    def generate_comparison_pdf(self):
-        """Gera o PDF comparativo."""
-        print(f"🔄 Gerando PDF Comparativo para {self.ano}...")
-        search_pattern = os.path.join(self.pasta_relatorios_mensais, f"relatorio_mensal_*_aereo_{self.ano}.csv")
-        all_files = sorted(glob.glob(search_pattern))
-        if not all_files: return
-            
-        all_data_list = []
-        for f in all_files:
-            try:
-                org_match = re.search(f'relatorio_mensal_(.*?)_aereo_{self.ano}\\.csv$', os.path.basename(f))
-                if org_match:
-                    df_report = pd.read_csv(f)
-                    for col in ['Total_Distancia_Km', 'Total_Emissoes_KgCO2eq', 'Total_Passagens', 'Total_Viagens']:
-                        df_report[col] = pd.to_numeric(df_report[col], errors='coerce').fillna(0)
-                    df_report['Instituicao'] = org_match.group(1)
-                    all_data_list.append(df_report)
-            except Exception: pass
-
-        if not all_data_list: return
-        df_comparativo = pd.concat(all_data_list, ignore_index=True)
-        
-        base_comp = alt.Chart(df_comparativo).encode(
-            x=alt.X('Mes_Num:O', axis=alt.Axis(title='Mês')),
-            color=alt.Color('Instituicao:N', title='Instituição'),
-            tooltip=['Instituicao', 'Mes_Ano', 'Total_Emissoes_KgCO2eq', 'Total_Distancia_Km', 'Total_Passagens']
-        ).properties(width=700)
-
-        chart1 = self._create_chart_with_text(base_comp, 'Total_Emissoes_KgCO2eq', 'Total Emissões ($KgCO_2eq$)', ',.0f')
-        chart2 = self._create_chart_with_text(base_comp, 'Total_Distancia_Km', 'Total Distância (km)', ',.0f')
-        chart3 = self._create_chart_with_text(base_comp, 'Total_Passagens', 'Total Passagens (R$)', ',.0f')
-
-        dashboard = alt.vconcat(chart1, chart2, chart3).properties(title=f"Comparativo Institucional - {self.ano}")
-        
-        instituicoes = sorted(df_comparativo['Instituicao'].unique())
-        nome_arquivo = f'dashboard_comparativo_institucional_{self.ano}_{"_".join(instituicoes)}.pdf'
-        try:
-            dashboard.save(os.path.join(self.pasta_relatorios_mensais, nome_arquivo))
-            print(f"   - ✅ PDF comparativo salvo.")
-        except Exception as e:
-            print(f"   - ❌ Erro ao salvar PDF: {e}")
 
     def _clean_numeric_value(self, value_in):
         if pd.isna(value_in): return np.nan
@@ -128,6 +45,24 @@ class ReportGenerator:
             return float(s)
         except: return np.nan
 
+    def _format_metric_value(self, row): 
+        indicador = row['Indicador/Métrica']; valor = row['Valor']; tipo = row['Tipo']
+        if pd.isna(valor): return 'N/A'
+        def fmt(v, d=2): return f"{v:,.{d}f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        
+        if tipo == 'Score (0 a 1)': return fmt(valor, 4)
+        if tipo == 'Variação vs Baseline': return f"{fmt(valor * 100)}%"
+        if tipo == 'Baseline':
+            if 'R$' in indicador: return f"R$ {fmt(valor)}"
+            if 'KgCO2eq' in indicador: return f"{fmt(valor)}"
+        
+        if 'Percent' in indicador: return f"{fmt(valor)}%"
+        if 'R$' in indicador: return f"R$ {fmt(valor)}"
+        if 'KgCO2eq' in indicador: return f"{fmt(valor)} KgCO2eq"
+        if 'Km' in indicador: return f"{fmt(valor)} Km"
+        if 'Count' in indicador or 'Trips' in indicador: return f"{int(valor)}" 
+        return f"{fmt(valor)}"
+
     def _get_baseline_values(self, orgao):
         ano_anterior = self.ano - 1
         pasta_metricas_anterior = f'dadosViagens/dados_viagens{ano_anterior}/metricas_scores'
@@ -135,38 +70,211 @@ class ReportGenerator:
         lista_arquivos = glob.glob(padrao_arquivo)
         if lista_arquivos:
             try:
-                df_anterior = pd.read_csv(lista_arquivos[0], sep=';') # Lê sem decimal definido, pois é misto
-                val_emiss = df_anterior.loc[(df_anterior['Indicador/Métrica'] == 'ED1.1_Total_Emissions_KgCO2eq') & (df_anterior['Tipo'] == 'Métrica Bruta'), 'Valor'].iloc[0]
-                val_custo = df_anterior.loc[(df_anterior['Indicador/Métrica'] == 'ED2.1_Total_Costs_R$') & (df_anterior['Tipo'] == 'Métrica Bruta'), 'Valor'].iloc[0]
-                return self._clean_numeric_value(val_emiss), self._clean_numeric_value(val_custo)
+                df_anterior = pd.read_csv(lista_arquivos[0], sep=';') 
+                val_emiss_str = df_anterior.loc[(df_anterior['Indicador/Métrica'] == 'ED1.1_Total_Emissions_KgCO2eq') & (df_anterior['Tipo'] == 'Métrica Bruta'), 'Valor'].iloc[0]
+                val_custo_str = df_anterior.loc[(df_anterior['Indicador/Métrica'] == 'ED2.1_Total_Costs_R$') & (df_anterior['Tipo'] == 'Métrica Bruta'), 'Valor'].iloc[0]
+                val_emiss = self._clean_numeric_value(val_emiss_str)
+                val_custo = self._clean_numeric_value(val_custo_str)
+                if pd.notna(val_emiss) and pd.notna(val_custo): return val_emiss, val_custo
             except Exception: pass
         return self.BASELINE_HISTORICO_ED1_1, self.BASELINE_HISTORICO_ED2_1
 
-    def _format_metric_value(self, row):
-        indicador = row['Indicador/Métrica']; valor = row['Valor']; tipo = row['Tipo']
-        if pd.isna(valor): return 'N/A'
-        def fmt(v, d=2): return f"{v:,.{d}f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    def _calcular_indices_gerais(self, df_metrics):
+        def get_score(code):
+            try:
+                row = df_metrics[(df_metrics['Indicador/Métrica'].str.startswith(code)) & (df_metrics['Tipo'].str.contains('Score'))]
+                if not row.empty:
+                    val = row['Valor'].values[0]
+                    if isinstance(val, str): val = float(val.replace(',', '.'))
+                    return val
+                return 0.0
+            except: return 0.0
+
+        score_emissoes = get_score('ED1.1')
+        score_custos = get_score('ED2.1')
+        score_urgencia = get_score('DF1.5')
         
-        if tipo == 'Score (0 a 1)': return fmt(valor, 4)
-        if tipo == 'Variação vs Baseline': return f"{fmt(valor * 100)}%"
-        if 'R$' in indicador: return f"R$ {fmt(valor)}"
-        if 'KgCO2eq' in indicador: return f"{fmt(valor)} KgCO2eq"
-        if 'Km' in indicador: return f"{fmt(valor)} Km"
-        if 'Count' in indicador or 'Trips' in indicador: return f"{int(valor)}"
-        return fmt(valor)
+        idx_emissoes_custo = (score_emissoes * 0.5) + (score_custos * 0.5)
+        idx_motivacoes = score_urgencia 
+        idx_barreiras = 0.500 
+        idx_geral = (idx_emissoes_custo + idx_motivacoes + idx_barreiras) / 3
+
+        data_kpi = [
+            {'Label': 'ÍNDICE GERAL', 'Value': idx_geral, 'Color': 'white', 'TextColor': 'black', 'X': 0, 'Y': 0, 'W': 2, 'H': 0.8},
+            
+            {'Label': 'Emissões, Deslocamento e Custo', 'Value': idx_emissoes_custo, 'Color': '#e2f0d9', 'TextColor': 'black', 'X': 0, 'Y': 1.2, 'W': 2, 'H': 0.8},
+            {'Label': 'Análise de Emissões', 'Value': score_emissoes, 'Color': '#e2f0d9', 'TextColor': 'black', 'X': 0, 'Y': 2.0, 'W': 0.66, 'H': 0.6},
+            {'Label': 'Análise do Deslocamento', 'Value': score_emissoes, 'Color': '#e2f0d9', 'TextColor': 'black', 'X': 0.67, 'Y': 2.0, 'W': 0.66, 'H': 0.6},
+            {'Label': 'Análise dos Custos', 'Value': score_custos, 'Color': '#a9d08e', 'TextColor': 'black', 'X': 1.34, 'Y': 2.0, 'W': 0.66, 'H': 0.6},
+
+            {'Label': 'Motivações para o voo', 'Value': idx_motivacoes, 'Color': '#dae3f3', 'TextColor': 'black', 'X': 2.2, 'Y': 1.2, 'W': 2, 'H': 0.8},
+            {'Label': 'Incentivo à hipermobilidade', 'Value': idx_motivacoes, 'Color': '#dae3f3', 'TextColor': 'black', 'X': 2.2, 'Y': 2.0, 'W': 1, 'H': 0.6},
+            {'Label': 'Propósitos do voo', 'Value': 1.000, 'Color': '#dae3f3', 'TextColor': 'black', 'X': 3.2, 'Y': 2.0, 'W': 1, 'H': 0.6},
+
+            {'Label': 'Barreiras Institucionais', 'Value': idx_barreiras, 'Color': '#fff2cc', 'TextColor': 'black', 'X': 4.4, 'Y': 1.2, 'W': 2, 'H': 0.8},
+            {'Label': 'Restrições', 'Value': 0.667, 'Color': '#fff2cc', 'TextColor': 'black', 'X': 4.4, 'Y': 2.0, 'W': 0.66, 'H': 0.6},
+            {'Label': 'Incentivo', 'Value': 0.000, 'Color': '#ffd966', 'TextColor': 'black', 'X': 5.07, 'Y': 2.0, 'W': 0.66, 'H': 0.6},
+            {'Label': 'Mudança Organizacional', 'Value': 0.250, 'Color': '#bf8f00', 'TextColor': 'white', 'X': 5.74, 'Y': 2.0, 'W': 0.66, 'H': 0.6},
+        ]
+        return pd.DataFrame(data_kpi)
+
+    # --- CHART BUILDERS (CORRIGIDOS) ---
+
+    def _create_chart_with_text(self, base, y_col, y_title, y_format):
+        """Cria um gráfico de linha com rótulos de texto."""
+        line = base.mark_line(point=True).encode(y=alt.Y(y_col, title=y_title))
+        text = base.mark_text(dy=-10, color='black').encode(
+            x=alt.X('Mes_Num:O'), 
+            y=alt.Y(y_col),
+            text=alt.condition(alt.datum[y_col] > 0, alt.Text(y_col, format=y_format, type='quantitative'), alt.value(''))
+        )
+        return (line + text).properties(title=f'Comparativo Institucional de {y_title}')
+
+    def _build_kpi_header(self, df_metrics):
+        """Constrói o gráfico de KPIs com largura ajustada para evitar cortes."""
+        df_kpi = self._calcular_indices_gerais(df_metrics)
+        
+        base = alt.Chart(df_kpi).encode()
+        rects = base.mark_rect(stroke='gray', strokeWidth=0.5).encode(
+            x=alt.X('X:Q', axis=None),
+            y=alt.Y('Y:Q', axis=None, scale=alt.Scale(reverse=True)),
+            x2='x2_calc:Q', y2='y2_calc:Q', color=alt.Color('Color:N', scale=None),
+        ).transform_calculate(x2_calc="datum.X + datum.W", y2_calc="datum.Y + datum.H")
+
+        # Texto do Rótulo: Removi o 'limit' e ajustei o tamanho
+        labels = base.mark_text(dy=-10, size=10).encode(
+            x=alt.X('cx_calc:Q', axis=None), 
+            y=alt.Y('cy_calc:Q', axis=None, scale=alt.Scale(reverse=True)),
+            text='Label:N', 
+            color=alt.Color('TextColor:N', scale=None)
+        ).transform_calculate(cx_calc="datum.X + (datum.W / 2)", cy_calc="datum.Y + (datum.H / 2)")
+
+        # Texto do Valor
+        values = base.mark_text(dy=5, size=14, fontWeight='bold').encode(
+            x=alt.X('cx_calc:Q', axis=None), 
+            y=alt.Y('cy_calc:Q', axis=None, scale=alt.Scale(reverse=True)),
+            text=alt.Text('Value:Q', format='.3f'), 
+            color=alt.Color('TextColor:N', scale=None)
+        ).transform_calculate(cx_calc="datum.X + (datum.W / 2)", cy_calc="datum.Y + (datum.H / 2)")
+
+        # Aumentei a largura de 800 para 1000 para os textos caberem melhor
+        return (rects + labels + values).properties(width=1000, height=150, title="Painel de Índices")
+
+    def _build_monthly_trend_chart(self, orgao):
+        """Cria os gráficos de tendência mensal (Linhas)."""
+        caminho = os.path.join(self.pasta_relatorios_mensais, f"relatorio_mensal_{orgao}_aereo_{self.ano}.csv")
+        if not os.path.exists(caminho): return None
+        df = pd.read_csv(caminho)
+        for col in ['Total_Emissoes_KgCO2eq', 'Total_Distancia_Km', 'Total_Passagens']:
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+
+        base = alt.Chart(df).encode(x=alt.X('Mes_Num:O', title='Mês'))
+        
+        def make_line(y_col, title, fmt):
+            line = base.mark_line(point=True).encode(y=alt.Y(y_col, title=title))
+            text = base.mark_text(dy=-10).encode(
+                x=alt.X('Mes_Num:O'),
+                y=alt.Y(y_col),
+                text=alt.Text(y_col, format=fmt, type='quantitative')
+            )
+            return (line + text).properties(title=title, width=600)
+
+        c1 = make_line('Total_Emissoes_KgCO2eq', 'Emissões (Kg)', ',.0f')
+        c2 = make_line('Total_Distancia_Km', 'Distância (Km)', ',.0f')
+        c3 = make_line('Total_Passagens', 'Custos (R$)', ',.0f')
+        return alt.vconcat(c1, c2, c3).properties(title=f"Tendência Mensal - {orgao}")
+
+    def _build_metrics_charts(self, orgao):
+        """Cria gráficos de barras (Baseline vs Atual)."""
+        caminho = os.path.join(self.pasta_metricas, f"relatorio_metricas_scores_{orgao}_{self.ano}.csv")
+        if not os.path.exists(caminho): return None
+        df = pd.read_csv(caminho, sep=';')
+        df['Valor_Num'] = df['Valor'].apply(self._clean_numeric_value)
+        
+        inds = ['ED1.1_Total_Emissions_KgCO2eq', 'ED1.1_Baseline_KgCO2eq', 'ED2.1_Total_Costs_R$', 'ED2.1_Baseline_R$']
+        df_comp = df[df['Indicador/Métrica'].isin(inds)].copy()
+        df_comp['Grupo'] = df_comp['Indicador/Métrica'].apply(lambda x: 'Emissões' if 'ED1.1' in x else 'Custos')
+        df_comp['Legenda'] = df_comp['Tipo'].apply(lambda x: 'Baseline' if x == 'Baseline' else 'Atual')
+        
+        chart_comp = alt.Chart(df_comp).mark_bar().encode(
+            x=alt.X('Legenda:N', title=None), y=alt.Y('Valor_Num:Q', title='Valor Total'),
+            color='Legenda:N', column=alt.Column('Grupo:N', title='Comparativo vs Baseline'), tooltip=['Indicador/Métrica', 'Valor']
+        ).properties(width=150)
+
+        df_scores = df[df['Tipo'] == 'Score (0 a 1)'].copy()
+        chart_scores = alt.Chart(df_scores).mark_bar().encode(
+            x=alt.X('Indicador/Métrica', title=None), y=alt.Y('Valor_Num:Q', scale=alt.Scale(domain=[0, 1]), title='Score'),
+            color=alt.Color('Valor_Num:Q', scale=alt.Scale(scheme='redyellowgreen', domain=[0, 1])),
+            tooltip=['Indicador/Métrica', 'Valor']
+        ).properties(width=300, title='Scores')
+
+        return alt.hconcat(chart_comp, chart_scores).resolve_scale(y='independent')
+
+    def _build_executive_charts(self, orgao):
+        """Cria Pizza (Vínculo) e Barras (Categoria)."""
+        df = self._load_master_file(orgao)
+        if df.empty: return None
+        for col in ['Emissões (KgCO2eq)', 'Distância (GCD)']:
+            df[col] = pd.to_numeric(df[col].astype(str).str.replace(',', '.', regex=False), errors='coerce').fillna(0)
+
+        agg = df.groupby('Vínculo')['Emissões (KgCO2eq)'].sum().reset_index()
+        agg['Pct'] = agg['Emissões (KgCO2eq)'] / agg['Emissões (KgCO2eq)'].sum()
+        
+        base = alt.Chart(agg).encode(theta=alt.Theta("Emissões (KgCO2eq)", stack=True))
+        pie = base.mark_arc(outerRadius=100).encode(
+            color=alt.Color("Vínculo", scale=alt.Scale(scheme='category10')),
+            order=alt.Order("Emissões (KgCO2eq)", sort="descending"),
+            tooltip=["Vínculo", alt.Tooltip("Pct", format=".1%")]
+        )
+        text = base.mark_text(radius=120).encode(text=alt.Text("Pct", format=".1%"), order=alt.Order("Emissões (KgCO2eq)", sort="descending"), color=alt.value("black"))
+        chart_pie = (pie + text).properties(title="Emissões por Vínculo")
+
+        df_bars = df.groupby('Categoria Distância')[['Distância (GCD)', 'Emissões (KgCO2eq)']].sum().reset_index()
+        df_melt = df_bars.melt('Categoria Distância', var_name='Métrica', value_name='Valor')
+        chart_bars = alt.Chart(df_melt).mark_bar().encode(
+            x=alt.X('Categoria Distância', title=None, axis=alt.Axis(labels=True, labelAngle=0)),
+            y=alt.Y('Valor', title='Total'),
+            color='Categoria Distância', column='Métrica:N', tooltip=['Categoria Distância', 'Valor']
+        ).properties(width=150, title="Por Categoria")
+
+        return alt.hconcat(chart_pie, chart_bars).resolve_scale(color='independent')
+
+    # --- GERADORES CSV/PDF PRINCIPAIS ---
+
+    def generate_monthly_report(self, orgao: str):
+        print(f"🔄 Gerando Relatório Mensal (CSV) para {orgao}...")
+        df = self._load_master_file(orgao)
+        if df.empty: return
+        df['Data_Viagem'] = pd.to_datetime(df['Período - Data de início'], format='%d/%m/%Y', errors='coerce')
+        df.dropna(subset=['Data_Viagem'], inplace=True)
+        df['Mes_Num'] = df['Data_Viagem'].dt.month
+        df['Mes_Ano'] = df['Mes_Num'].apply(lambda x: f"{self.ano}-{x:02d}")
+        for col in ['Distância (GCD)', 'Emissões (KgCO2eq)', 'Valor passagens']:
+            df[col] = pd.to_numeric(df[col].astype(str).str.replace(',', '.', regex=False), errors='coerce').fillna(0)
+        df_agrupado = df.groupby(['Mes_Ano', 'Mes_Num']).agg(
+            Total_Distancia_Km = ('Distância (GCD)', 'sum'),
+            Total_Emissoes_KgCO2eq = ('Emissões (KgCO2eq)', 'sum'),
+            Total_Viagens = ('Identificador do processo de viagem', 'count'),
+            Total_Passagens = ('Valor passagens', 'sum')
+        ).reset_index()
+        meses_template = pd.DataFrame({'Mes_Num': range(1, 13)})
+        meses_template['Mes_Ano'] = meses_template['Mes_Num'].apply(lambda x: f"{self.ano}-{x:02d}")
+        df_mensal = pd.merge(meses_template, df_agrupado, on=['Mes_Num', 'Mes_Ano'], how='left')
+        df_mensal.fillna(0, inplace=True)
+        df_mensal['Total_Viagens'] = df_mensal['Total_Viagens'].astype(int)
+        caminho = os.path.join(self.pasta_relatorios_mensais, f"relatorio_mensal_{orgao}_aereo_{self.ano}.csv")
+        df_mensal.round(2).to_csv(caminho, index=False)
+        print(f"   - ✅ Relatório mensal salvo.")
 
     def generate_metrics_report(self, orgao: str):
-        """Gera o relatório CSV de métricas e scores."""
         print(f"🔄 Gerando Relatório de Métricas (CSV) para {orgao}...")
         df = self._load_master_file(orgao)
         if df.empty: return
-        
-        for col in ['Distância (GCD)', 'Emissões (KgCO2eq)', 'Valor passagens', 'Valor diárias', 'Valor outros gastos']:
+        colunas_numericas = ['Distância (GCD)', 'Emissões (KgCO2eq)', 'Valor passagens', 'Valor diárias', 'Valor outros gastos']
+        for col in colunas_numericas:
             df[col] = pd.to_numeric(df[col].astype(str).str.replace(',', '.', regex=False), errors='coerce').fillna(0)
-            
         df['Custo_Total_Viagem'] = df[['Valor passagens', 'Valor diárias', 'Valor outros gastos']].sum(axis=1)
         
-        # Totais
         totais = {
             'ED1.1_Total_Emissions_KgCO2eq': df['Emissões (KgCO2eq)'].sum(),
             'ED1.2_Avoidable_Emissions_KgCO2eq': df.loc[df['Categoria Distância'] == 'Muito Curta (Evitável)', 'Emissões (KgCO2eq)'].sum(),
@@ -174,9 +282,8 @@ class ReportGenerator:
             'ED2.3_Total_Trips': len(df),
             'ED3.1_Total_Distance_Km': df['Distância (GCD)'].sum()
         }
-        # Médias
-        n_viajantes = df['CPF viajante'].nunique()
-        n_viagens = len(df)
+        n_viajantes = df['CPF viajante'].nunique(); n_viagens = len(df)
+        
         totais.update({
             'ED1.3_Avg_Emissions_per_Traveler': totais['ED1.1_Total_Emissions_KgCO2eq'] / n_viajantes if n_viajantes else 0,
             'ED1.4_Avg_Emissions_per_Trip': totais['ED1.1_Total_Emissions_KgCO2eq'] / n_viagens if n_viagens else 0,
@@ -186,10 +293,9 @@ class ReportGenerator:
             'ED3.2_Avg_Distance_per_Traveler': totais['ED3.1_Total_Distance_Km'] / n_viajantes if n_viajantes else 0,
             'ED3.3_Avg_Distance_per_Trip': totais['ED3.1_Total_Distance_Km'] / n_viagens if n_viagens else 0
         })
-        # Governança
+        
         urgentes = (df['Viagem Urgente'].astype(str).str.strip().str.upper() == 'SIM').sum()
-        urg_s_just = df[(df['Viagem Urgente'].astype(str).str.strip().str.upper() == 'SIM') & 
-                        (df['Justificativa Urgência Viagem'].astype(str).str.strip().fillna('Sem informação').str.upper() == 'SEM INFORMAÇÃO')].shape[0]
+        urg_s_just = df[(df['Viagem Urgente'].astype(str).str.strip().str.upper() == 'SIM') & (df['Justificativa Urgência Viagem'].astype(str).str.strip().fillna('Sem informação').str.upper() == 'SEM INFORMAÇÃO')].shape[0]
         totais.update({
             'DF1.4_Urgent_Trips_Percent': (urgentes / n_viagens * 100) if n_viagens else 0,
             'DF1.4_Urgent_Trips_Count': urgentes,
@@ -197,147 +303,89 @@ class ReportGenerator:
             'DF1.5_Urgent_Trips_wo_Justif_Count': urg_s_just
         })
 
-        metrics_df = pd.DataFrame(totais.items(), columns=['Indicador/Métrica', 'Valor'])
-        metrics_df['Tipo'] = 'Métrica Bruta'
-
-        # Baseline e Scores
+        metrics_df = pd.DataFrame(totais.items(), columns=['Indicador/Métrica', 'Valor']); metrics_df['Tipo'] = 'Métrica Bruta'
+        
         BASE_ED1, BASE_ED2 = self._get_baseline_values(orgao)
-        baselines_df = pd.DataFrame([
-            {'Indicador/Métrica': 'ED1.1_Baseline_KgCO2eq', 'Valor': BASE_ED1, 'Tipo': 'Baseline'},
-            {'Indicador/Métrica': 'ED2.1_Baseline_R$', 'Valor': BASE_ED2, 'Tipo': 'Baseline'}
-        ])
-
-        scores = {}
-        vars = {}
+        baselines_df = pd.DataFrame([{'Indicador/Métrica': 'ED1.1_Baseline_KgCO2eq', 'Valor': BASE_ED1, 'Tipo': 'Baseline'}, {'Indicador/Métrica': 'ED2.1_Baseline_R$', 'Valor': BASE_ED2, 'Tipo': 'Baseline'}])
         
-        # DF1.5
-        prop_urg_sj = urg_s_just / n_viagens if n_viagens else 0
-        scores['DF1.5_Score'] = max(0, 1.0 - prop_urg_sj)
-        vars['DF1.5_Proporção_Urg_s_Just'] = prop_urg_sj
-        
-        # ED1.1
-        var_ed1 = (totais['ED1.1_Total_Emissions_KgCO2eq'] - BASE_ED1) / BASE_ED1 if BASE_ED1 else 0
-        scores['ED1.1_Score'] = 1.0 if totais['ED1.1_Total_Emissions_KgCO2eq'] <= BASE_ED1 else max(0, 1.0 - (var_ed1 / 2.0))
-        vars['ED1.1_Variação_vs_Baseline'] = var_ed1
-        
-        # ED2.1
-        var_ed2 = (totais['ED2.1_Total_Costs_R$'] - BASE_ED2) / BASE_ED2 if BASE_ED2 else 0
-        scores['ED2.1_Score'] = 1.0 if totais['ED2.1_Total_Costs_R$'] <= BASE_ED2 else max(0, 1.0 - (var_ed2 / 2.0))
-        vars['ED2.1_Variação_vs_Baseline'] = var_ed2
-
+        scores = {'ED1.1_Score': 1.0 if totais['ED1.1_Total_Emissions_KgCO2eq'] <= BASE_ED1 else 0.5, 'ED2.1_Score': 1.0 if totais['ED2.1_Total_Costs_R$'] <= BASE_ED2 else 0.5, 'DF1.5_Score': max(0, 1.0 - (urg_s_just / n_viagens if n_viagens else 0))}
         scores_df = pd.DataFrame(scores.items(), columns=['Indicador/Métrica', 'Valor']); scores_df['Tipo'] = 'Score (0 a 1)'
-        vars_df = pd.DataFrame(vars.items(), columns=['Indicador/Métrica', 'Valor']); vars_df['Tipo'] = 'Variação vs Baseline'
-
-        final_df = pd.concat([metrics_df, baselines_df, vars_df, scores_df], ignore_index=True)
+        
+        final_df = pd.concat([metrics_df, baselines_df, scores_df], ignore_index=True)
         final_df['Valor'] = final_df.apply(self._format_metric_value, axis=1)
+        final_df.to_csv(os.path.join(self.pasta_metricas, f"relatorio_metricas_scores_{orgao}_{self.ano}.csv"), index=False, sep=';', decimal=',')
+        print(f"   - ✅ Relatório de Métricas (Completo) salvo.")
+
+    def generate_consolidated_dashboard(self, orgao: str):
+        print(f"🔄 Gerando Dashboard Completo Consolidado para {orgao}...")
         
-        caminho = os.path.join(self.pasta_metricas, f"relatorio_metricas_scores_{orgao}_{self.ano}.csv")
-        final_df.to_csv(caminho, index=False, sep=';', decimal=',')
-        print(f"   - ✅ Relatório CSV salvo em: '{caminho}'")
+        c1 = self._build_monthly_trend_chart(orgao)
+        c2 = self._build_metrics_charts(orgao)
+        c3 = self._build_executive_charts(orgao)
+        
+        if not c1 or not c2 or not c3: return
 
-    # --- MÉTODO REINSERIDO: DASHBOARD DE MÉTRICAS (BARRAS) ---
-    def generate_metrics_dashboard(self, orgao: str):
-        """Gera o dashboard visual de métricas (Barras comparativas)."""
-        print(f"🔄 Gerando Dashboard Visual de Métricas para {orgao}...")
-        caminho_csv = os.path.join(self.pasta_metricas, f"relatorio_metricas_scores_{orgao}_{self.ano}.csv")
-        if not os.path.exists(caminho_csv): return
+        # Load Metrics for KPI
+        caminho_metricas = os.path.join(self.pasta_metricas, f"relatorio_metricas_scores_{orgao}_{self.ano}.csv")
+        if os.path.exists(caminho_metricas): df_metrics = pd.read_csv(caminho_metricas, sep=';')
+        else: df_metrics = pd.DataFrame(columns=['Indicador/Métrica', 'Valor', 'Tipo'])
+        
+        chart_kpi = self._build_kpi_header(df_metrics)
 
+        final_dash = alt.vconcat(
+            chart_kpi,
+            c1, 
+            alt.vconcat(c2, c3).resolve_scale(color='independent')
+        ).properties(
+            title=f"Relatório Integrado - {orgao} {self.ano}"
+        ).resolve_scale(color='independent')
+
+        nome_base = f"dashboard_completo_{orgao}_{self.ano}"
         try:
-            df = pd.read_csv(caminho_csv, sep=';') # CSV Misto
-            df['Valor_Num'] = df['Valor'].apply(self._clean_numeric_value)
-            
-            # Gráfico Comparativo
-            indicadores = ['ED1.1_Total_Emissions_KgCO2eq', 'ED1.1_Baseline_KgCO2eq', 'ED2.1_Total_Costs_R$', 'ED2.1_Baseline_R$']
-            df_comp = df[df['Indicador/Métrica'].isin(indicadores)].copy()
-            df_comp['Grupo'] = df_comp['Indicador/Métrica'].apply(lambda x: 'Emissões (KgCO2eq)' if 'ED1.1' in x else 'Custos (R$)')
-            df_comp['Legenda'] = df_comp['Tipo'].apply(lambda x: 'Baseline' if x == 'Baseline' else 'Atual')
-            
-            chart_comp = alt.Chart(df_comp).mark_bar().encode(
-                x=alt.X('Legenda:N', title=None),
-                y=alt.Y('Valor_Num:Q', title='Valor'),
-                color='Legenda:N',
-                column='Grupo:N',
-                tooltip=['Indicador/Métrica', 'Valor']
-            ).properties(width=150)
-
-            # Gráfico Scores
-            df_scores = df[df['Tipo'] == 'Score (0 a 1)'].copy()
-            chart_scores = alt.Chart(df_scores).mark_bar().encode(
-                x='Indicador/Métrica',
-                y=alt.Y('Valor_Num:Q', scale=alt.Scale(domain=[0, 1]), title='Score'),
-                color=alt.Color('Valor_Num:Q', scale=alt.Scale(scheme='redyellowgreen', domain=[0, 1])),
-                tooltip=['Indicador/Métrica', 'Valor']
-            ).properties(width=400, title='Scores de Desempenho')
-            
-            dashboard = alt.vconcat(chart_comp, chart_scores).resolve_scale(y='independent')
-            dashboard.save(os.path.join(self.pasta_metricas, f"dashboard_metricas_{orgao}_{self.ano}.pdf"))
-            print(f"   - ✅ Dashboard de Métricas salvo.")
+            final_dash.save(os.path.join(self.pasta_metricas, f"{nome_base}.html"))
+            print(f"   - ✅ Dashboard HTML salvo.")
+            final_dash.save(os.path.join(self.pasta_metricas, f"{nome_base}_temp.png"), ppi=150)
+            img = Image.open(os.path.join(self.pasta_metricas, f"{nome_base}_temp.png"))
+            if img.mode == 'RGBA': img = img.convert('RGB')
+            img.save(os.path.join(self.pasta_metricas, f"{nome_base}.pdf"), "PDF")
+            if os.path.exists(os.path.join(self.pasta_metricas, f"{nome_base}_temp.png")):
+                os.remove(os.path.join(self.pasta_metricas, f"{nome_base}_temp.png"))
+            print(f"   - ✅ Dashboard PDF salvo.")
         except Exception as e:
-            print(f"   - ❌ Erro ao gerar dashboard métricas: {e}")
+            print(f"   - ⚠️ Erro ao salvar Dashboard: {e}")
 
-    # --- MÉTODO NOVO: DASHBOARD EXECUTIVO (PIZZA + BARRAS DETALHADAS) ---
-    def generate_executive_dashboard(self, orgao: str):
-        """Gera o dashboard visual detalhado (Pizza por Vínculo, Barras por Distância)."""
-        print(f"🔄 Gerando Dashboard Executivo para {orgao}...")
-        df = self._load_master_file(orgao)
-        if df.empty: return
-
-        for col in ['Emissões (KgCO2eq)', 'Distância (GCD)']:
-            df[col] = pd.to_numeric(df[col].astype(str).str.replace(',', '.', regex=False), errors='coerce').fillna(0)
-
-        # Pizza: Emissões por Vínculo
-        agg_emiss = df.groupby('Vínculo')['Emissões (KgCO2eq)'].sum().reset_index()
-        agg_emiss['Percent'] = agg_emiss['Emissões (KgCO2eq)'] / agg_emiss['Emissões (KgCO2eq)'].sum()
+    def generate_comparison_pdf(self):
+        print(f"🔄 Gerando Comparativo para {self.ano}...")
+        search_pattern = os.path.join(self.pasta_relatorios_mensais, f"relatorio_mensal_*_aereo_{self.ano}.csv")
+        all_files = sorted(glob.glob(search_pattern))
+        if not all_files: return
+        all_data = []
+        for f in all_files:
+            try:
+                org = re.search(f'relatorio_mensal_(.*?)_aereo_{self.ano}\\.csv$', os.path.basename(f)).group(1)
+                df = pd.read_csv(f)
+                for c in ['Total_Emissoes_KgCO2eq', 'Total_Distancia_Km', 'Total_Passagens']:
+                    df[c] = pd.to_numeric(df[c], errors='coerce').fillna(0)
+                df['Instituicao'] = org
+                all_data.append(df)
+            except: pass
+        if not all_data: return
+        df_comp = pd.concat(all_data)
         
-        base_pie = alt.Chart(agg_emiss).encode(theta=alt.Theta("Emissões (KgCO2eq)", stack=True))
-        pie = base_pie.mark_arc(outerRadius=120).encode(
-            color="Vínculo",
-            order=alt.Order("Emissões (KgCO2eq)", sort="descending"),
-            tooltip=["Vínculo", "Emissões (KgCO2eq)", alt.Tooltip("Percent", format=".1%")]
-        )
-        text = base_pie.mark_text(radius=140).encode(
-            text=alt.Text("Percent", format=".1%"),
-            order=alt.Order("Emissões (KgCO2eq)", sort="descending"),
-            color=alt.value("black")
-        )
-        chart_pie_emiss = (pie + text).properties(title="Emissões por Função")
-
-        # Pizza: Viagens por Vínculo
-        agg_trips = df.groupby('Vínculo')['Identificador do processo de viagem'].count().reset_index().rename(columns={'Identificador do processo de viagem': 'Viagens'})
-        agg_trips['Percent'] = agg_trips['Viagens'] / agg_trips['Viagens'].sum()
+        base = alt.Chart(df_comp).encode(x=alt.X('Mes_Num:O', title='Mês'), color='Instituicao:N', tooltip=['Instituicao', 'Mes_Ano', 'Total_Emissoes_KgCO2eq'])
+        c1 = self._create_chart_with_text(base, 'Total_Emissoes_KgCO2eq', 'Emissões (Kg)', ',.0f')
+        c2 = self._create_chart_with_text(base, 'Total_Distancia_Km', 'Distância (Km)', ',.0f')
+        c3 = self._create_chart_with_text(base, 'Total_Passagens', 'Custos (R$)', ',.0f')
         
-        base_pie2 = alt.Chart(agg_trips).encode(theta=alt.Theta("Viagens", stack=True))
-        pie2 = base_pie2.mark_arc(outerRadius=120).encode(
-            color="Vínculo",
-            order=alt.Order("Viagens", sort="descending"),
-            tooltip=["Vínculo", "Viagens", alt.Tooltip("Percent", format=".1%")]
-        )
-        text2 = base_pie2.mark_text(radius=140).encode(
-            text=alt.Text("Percent", format=".1%"),
-            order=alt.Order("Viagens", sort="descending"),
-            color=alt.value("black")
-        )
-        chart_pie_trips = (pie2 + text2).properties(title="Nº de Viagens por Função")
-
-        # Barras: Distância e Emissões por Categoria
-        df_bars = df.groupby('Categoria Distância')[['Distância (GCD)', 'Emissões (KgCO2eq)']].sum().reset_index()
-        df_melted = df_bars.melt('Categoria Distância', var_name='Métrica', value_name='Valor')
-        
-        chart_bars = alt.Chart(df_melted).mark_bar().encode(
-            x=alt.X('Categoria Distância', axis=alt.Axis(title=None)),
-            y=alt.Y('Valor', axis=alt.Axis(title='Total')),
-            color='Categoria Distância',
-            column='Métrica:N',
-            tooltip=['Categoria Distância', 'Valor']
-        ).properties(width=150, title="Comparativo: Curta vs Longa Distância")
-
-        dashboard = alt.vconcat(
-            alt.hconcat(chart_pie_emiss, chart_pie_trips),
-            chart_bars
-        ).resolve_scale(color='independent').properties(title=f"Dashboard Executivo - {orgao} {self.ano}")
-
-        try:
-            dashboard.save(os.path.join(self.pasta_metricas, f"dashboard_executivo_{orgao}_{self.ano}.pdf"))
-            print(f"   - ✅ Dashboard Executivo salvo.")
-        except Exception as e:
-            print(f"   - ❌ Erro ao salvar Dashboard Executivo: {e}")
+        dash = alt.vconcat(c1, c2, c3).properties(title=f"Comparativo Institucional {self.ano}")
+        name = f"dashboard_comparativo_institucional_{self.ano}"
+        try: 
+            dash.save(os.path.join(self.pasta_relatorios_mensais, f"{name}.html"))
+            dash.save(os.path.join(self.pasta_relatorios_mensais, f"{name}_temp.png"), ppi=200)
+            img = Image.open(os.path.join(self.pasta_relatorios_mensais, f"{name}_temp.png"))
+            if img.mode == 'RGBA': img = img.convert('RGB')
+            img.save(os.path.join(self.pasta_relatorios_mensais, f"{name}.pdf"), "PDF")
+            if os.path.exists(os.path.join(self.pasta_relatorios_mensais, f"{name}_temp.png")):
+                os.remove(os.path.join(self.pasta_relatorios_mensais, f"{name}_temp.png"))
+            print(f"   - ✅ Comparativo salvo (HTML e PDF).")
+        except: pass

@@ -1,4 +1,4 @@
-# classes/processor.py
+# viagens/processor.py
 import pandas as pd
 import numpy as np
 import os
@@ -152,14 +152,14 @@ class ViagemProcessor:
         self.df_viagens_agregadas['Emissões (KgCO2eq)'] = (self.df_viagens_agregadas['Distância (GCD)'] * self.df_viagens_agregadas['EF Aplicado']).round(4)
         print("✅ Emissões calculadas.")
 
-    # --- CLASSIFICAÇÃO ATUALIZADA (COM MOTIVO) ---
+    # --- CLASSIFICAÇÃO ATUALIZADA (COM MOTIVO PARA ALUNOS) ---
     def _classificar_vinculo(self, row):
         """
-        Classifica o viajante em Professor, Servidor, Externo ou Vazio.
-        Usa Cargo como primário e Motivo como secundário.
+        Classifica o viajante em Professor, Servidor, Externo, Acadêmico ou Vazio.
+        Usa Cargo e Motivo para desambiguação.
         """
         cargo = row.get('Cargo')
-        motivo = row.get('Motivo') # Pega a coluna Motivo
+        motivo = row.get('Motivo')
         
         # Normaliza strings
         cargo_str = str(cargo).upper().strip() if pd.notna(cargo) else ""
@@ -169,27 +169,34 @@ class ViagemProcessor:
         if cargo_str == 'NAN' or cargo_str == 'SEM INFORMAÇÃO' or cargo_str == '':
             cargo_str = None
             
-        # 1. Professores (Prioridade Máxima)
-        if cargo_str and any(termo in cargo_str for termo in ['PROFESSOR', 'DOCENTE', 'MAGISTERIO', 'VISITANTE', 'REGENTE DE ENSINO']):
+        # 1. Professores (Prioridade Máxima pelo Cargo)
+        if cargo_str and any(k in cargo_str for k in ['PROFESSOR', 'DOCENTE', 'MAGISTERIO', 'VISITANTE', 'REGENTE']):
             return 'Professor'
-            
-        # 2. Externos explícitos no Cargo
-        if cargo_str and any(termo in cargo_str for termo in ['COLABORADOR', 'CONVIDADO', 'EXTERNO', 'ESTAGIARIO', 'BOLSISTA', 'CONSULTOR']):
+
+        # 2. Acadêmicos (Pelo Cargo)
+        if cargo_str and any(k in cargo_str for k in ['ESTUDANTE', 'DISCENTE', 'ALUNO', 'ACADEMICO', 'MESTRANDO', 'DOUTORANDO', 'BOLSISTA', 'ESTAGIARIO', 'POS-GRADUACAO']):
+            return 'Acadêmico'
+
+        # 3. Externos (Pelo Cargo)
+        if cargo_str and any(k in cargo_str for k in ['COLABORADOR', 'CONVIDADO', 'EXTERNO', 'CONSULTOR']):
             return 'Externo'
 
-        # 3. Servidores (Se tem cargo válido e não é Prof/Externo, é Servidor)
+        # 4. Verificação por MOTIVO (Se cargo não for conclusivo)
+        if motivo_str:
+            # Acadêmicos no Motivo
+            if any(k in motivo_str for k in ['ESTUDANTE', 'DISCENTE', 'ALUNO', 'ACADEMICO', 'MESTRANDO', 'DOUTORANDO', 'BOLSISTA', 'APRESENTAÇÃO DE TRABALHO']):
+                 return 'Acadêmico'
+            
+            # Externos no Motivo
+            if any(k in motivo_str for k in ['CONVIDADO', 'COLABORADOR', 'PALESTRANTE', 'EXTERNO', 'MEMBRO EXTERNO', 'BANCA EXAMINADORA']):
+                 return 'Externo'
+
+        # 5. Servidores (Se tem cargo válido e não caiu nos filtros acima, é Servidor)
         if cargo_str:
              return 'Servidor'
 
-        # 4. Se Cargo está Vazio/Inválido -> Tenta Salvar pelo MOTIVO
-        if motivo_str:
-            # Palavras-chave no Motivo que indicam fortemente um externo
-            keywords_externo = ['CONVIDADO', 'COLABORADOR', 'PALESTRANTE', 'EXTERNO', 'BOLSISTA', 'PESQUISADOR', 'PARTICIPANTE', 'MEMBRO EXTERNO']
-            if any(termo in motivo_str for termo in keywords_externo):
-                return 'Externo'
-            
-        # 5. Se falhar tudo
-        return 'Vazio'
+        # 6. Se falhar tudo
+        return 'Não Informado'
 
     def _build_master_file(self):
         print("🔄 Processo 4: Construindo Arquivo Mestre (ALL)...")
@@ -205,7 +212,7 @@ class ViagemProcessor:
         self.df_master['Distância (GCD)'] = self.df_master['Distância (GCD)'].round().astype(int)
         self.df_master['Emissões (KgCO2eq)'] = self.df_master['Emissões (KgCO2eq)'].round().astype(int)
         
-        print("   - Classificando vínculos (Professor / Servidor / Externo / Vazio)...")
+        print("   - Classificando vínculos (Professor / Servidor / Acadêmico / Externo)...")
         # Aplica a função de classificação atualizada
         self.df_master['Vínculo'] = self.df_master.apply(self._classificar_vinculo, axis=1)
         
