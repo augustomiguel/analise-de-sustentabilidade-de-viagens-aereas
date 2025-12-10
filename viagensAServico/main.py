@@ -4,68 +4,114 @@ from viagens.downloader import ViagensDownloader
 from viagens.geocoder import GeoCacheManager
 from viagens.processor import ViagemProcessor
 from viagens.reporting import ReportGenerator
-from viagens.filtro import Filtro # <-- IMPORTA A NOVA CLASSE
+from viagens.filtro import Filtro
 
-# --- CONFIGURAÇÃO PRINCIPAL DO FLUXO ---
+# --- CONFIGURAÇÃO GLOBAL ---
 ANOS_PARA_PROCESSAR = [2023, 2024, 2025] 
-ORGS_PARA_PROCESSAR = ['UFPB', 'UFCG'] # Instituições
-BAIXAR_NOVOS_DADOS = False # Mude para True se quiser baixar os dados novamente
+ORGS_PARA_PROCESSAR = ['UFPB', 'UFCG'] 
+BAIXAR_NOVOS_DADOS = False 
 
-# ----------------------------------------
+# ==============================================================================
+# FUNÇÕES DE CADA ETAPA DO PIPELINE
+# ==============================================================================
+
+def etapa_obter_dados(ano):
+    """
+    Etapa 1: Baixa (se necessário) e carrega os CSVs brutos (Viagem, Passagem, Trecho).
+    Retorna uma tupla (viagem_df, passagem_df, trecho_df) ou None se falhar.
+    """
+    print(f"--- 1. OBTENDO DADOS BRUTOS PARA {ano} ---")
+    downloader = ViagensDownloader(ano=ano)
+    
+    if BAIXAR_NOVOS_DADOS:
+        return downloader.obter_dados_brutos()
+    else:
+        return downloader.carregar_csvs()
+
+def etapa_processar_geral(ano, dados_brutos, geocoder):
+    """
+    Etapa 2: Processa TODAS as viagens (limpeza, geocoding, cálculo de emissões).
+    Gera o arquivo 'df_master_ALL_aereo_[ano].csv'.
+    """
+    print(f"\n--- 2. PROCESSANDO ARQUIVO MESTRE 'ALL' PARA {ano} ---")
+    viagem_df, passagem_df, trecho_df = dados_brutos
+    
+    # Instancia o processador com o geocoder compartilhado
+    processor = ViagemProcessor(ano=ano, geocoder=geocoder)
+    processor.load_data(viagem_df, passagem_df, trecho_df)
+    
+    # Executa o ETL pesado e salva o arquivo ALL
+    processor.process_all() 
+
+def etapa_relatorios_instituicao(ano, orgao):
+    """
+    Etapa 3: Filtra o arquivo 'ALL' para uma instituição específica e gera seus relatórios
+    (CSV Mensal, CSV Métricas, PDF Dashboard Executivo, PDF Dashboard Métricas).
+    """
+    print(f"\n--- 3. FILTRANDO E REPORTANDO PARA: {orgao} / {ano} ---")
+    
+    # 3a. Filtrar (Cria o recorte da instituição)
+    filtro = Filtro(ano=ano)
+    filtro.filtrar_e_salvar(orgao)
+    
+    # 3b. Gerar Relatórios
+    reporter = ReportGenerator(ano=ano)
+    
+    # Gera CSVs
+    reporter.generate_monthly_report(orgao=orgao)
+    reporter.generate_metrics_report(orgao=orgao)
+    
+    # Gera PDFs Visuais
+    reporter.generate_metrics_dashboard(orgao=orgao)   # Barras (Scores)
+    reporter.generate_executive_dashboard(orgao=orgao) # Pizza/Barras (Vínculo)
+
+def etapa_comparativo_ano(ano):
+    """
+    Etapa 4: Gera o PDF comparativo entre as instituições processadas naquele ano.
+    """
+    print(f"\n--- 4. GERANDO PDF COMPARATIVO PARA {ano} ---")
+    reporter = ReportGenerator(ano=ano)
+    reporter.generate_comparison_pdf()
+
+# ==============================================================================
+# BLOCO PRINCIPAL (ORQUESTRAÇÃO)
+# ==============================================================================
 
 def main():
     start_time = time.time()
     
-    # 1. Instanciar o Geocoder (ele é compartilhado)
+    # Inicializa o Geocoder uma única vez (cache compartilhado)
     print("--- INICIALIZANDO GEOCODER (CACHE MANAGER) ---")
     geocoder = GeoCacheManager(user_agent="MeuProjetoSustentabilidade/1.0")
     
     for ano in ANOS_PARA_PROCESSAR:
-        print(f"\n{'='*20} PROCESSANDO ANO: {ano} {'='*20}")
+        print(f"\n{'='*30} INICIANDO ANO: {ano} {'='*30}")
         
-        # 2. Obter Dados Brutos (Baixar ou Carregar)
-        downloader = ViagensDownloader(ano=ano)
+        # ---------------------------------------------------------
+        # ETAPA 1: Carregar Dados
+        # ---------------------------------------------------------
+        dados_brutos = etapa_obter_dados(ano)
         
-        if BAIXAR_NOVOS_DADOS:
-            print(f"--- 1. BAIXANDO DADOS PARA {ano} ---")
-            viagem_df, passagem_df, trecho_df = downloader.obter_dados_brutos()
-        else:
-            print(f"--- 1. CARREGANDO DADOS LOCAIS PARA {ano} ---")
-            viagem_df, passagem_df, trecho_df = downloader.carregar_csvs()
-            
-        if viagem_df is None:
-            print(f"❌ Falha ao obter dados para {ano}. Pulando este ano.")
+        if dados_brutos[0] is None: # Se falhou ao carregar (viagem_df é None)
+            print(f"❌ Ppulando ano {ano} por falha no carregamento de dados.")
             continue
-            
-        # --- FLUXO MODIFICADO ---
 
-        # 3. Processar (Cria o arquivo 'df_master_ALL_aereo_[ano].csv')
-        print(f"\n--- 2. PROCESSANDO ARQUIVO MESTRE 'ALL' PARA {ano} ---")
-        processor = ViagemProcessor(ano=ano, geocoder=geocoder)
-        processor.load_data(viagem_df, passagem_df, trecho_df)
-        processor.process_all() # Salva o arquivo 'ALL'
+        # ---------------------------------------------------------
+        # ETAPA 2: Processamento Pesado (Gera df_master_ALL)
+        # Comente esta linha se você já processou o arquivo 'ALL' e quer apenas refazer relatórios
+        # ---------------------------------------------------------
+        etapa_processar_geral(ano, dados_brutos, geocoder)
 
-        # 4. Instanciar Filtro e Repórter
-        # O Filtro carrega o arquivo 'ALL' que acabamos de criar
-        filtro = Filtro(ano=ano) 
-        reporter = ReportGenerator(ano=ano)
-
-        # 5. Loop por Órgão para FILTRAR e REPORTAR
+        # ---------------------------------------------------------
+        # ETAPA 3: Relatórios Individuais (Por Órgão)
+        # ---------------------------------------------------------
         for org in ORGS_PARA_PROCESSAR:
-            print(f"\n--- 3. FILTRANDO E REPORTANDO PARA: {org} / {ano} ---")
-            
-            # 5a. Filtro: Cria 'df_master_[ORG]_aereo_[ano].csv'
-            filtro.filtrar_e_salvar(org) 
-            
-            # 5b. Repórter: Lê o arquivo que o Filtro acabou de criar
-            reporter.generate_monthly_report(orgao=org)
-            reporter.generate_metrics_report(orgao=org)
+            etapa_relatorios_instituicao(ano, org)
 
-        # 6. Gerar Comparativo (Lê os arquivos mensais que acabaram de ser criados)
-        print(f"\n--- 4. GERANDO PDF COMPARATIVO PARA {ano} ---")
-        reporter.generate_comparison_pdf()
-        
-        # --- FIM DO FLUXO MODIFICADO ---
+        # ---------------------------------------------------------
+        # ETAPA 4: Comparativo Final do Ano
+        # ---------------------------------------------------------
+        etapa_comparativo_ano(ano)
 
     end_time = time.time()
     print(f"\n{'='*50}")

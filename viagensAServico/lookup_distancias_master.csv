@@ -19057,3 +19057,40 @@ SÃO FRANCISCO,"Recife, Pernambuco",37.779259,-122.419329,-8.058493,-34.884819,1
 Washington,BASEL,38.907192,-77.036871,47.558108,7.587826,6578.016311
 "Belo Horizonte, Minas Gerais",Seul,-19.922732,-43.945095,37.566679,126.978291,17865.677765
 Seul,"Belo Horizonte, Minas Gerais",37.566679,126.978291,-19.922732,-43.945095,17865.677765
+"Vitória, Espírito Santo","Cartagena,Colômbia",-20.320092,-40.337668,10.426557,-75.544167,5149.650885
+"Cartagena,Colômbia","Vitória, Espírito Santo",10.426557,-75.544167,-20.320092,-40.337668,5149.650885
+"Cartagena,Colômbia","Brasília, Distrito Federal",10.426557,-75.544167,-15.793987,-47.8828,4215.804502
+"Brasília, Distrito Federal","Cartagena,Colômbia",-15.793987,-47.8828,10.426557,-75.544167,4215.804502
+Bogotá,"Cartagena,Colômbia",4.599283,-74.080983,10.426557,-75.544167,667.720785
+"Cartagena,Colômbia",Bogotá,10.426557,-75.544167,4.599283,-74.080983,667.720785
+"Cartagena,Colômbia","São Paulo, São Paulo",10.426557,-75.544167,-23.550651,-46.633382,4914.90857
+"São Paulo, São Paulo","Cartagena,Colômbia",-23.550651,-46.633382,10.426557,-75.544167,4914.90857
+"Rio de Janeiro, Rio de Janeiro","Cartagena,Colômbia",-22.911014,-43.209373,10.426557,-75.544167,5112.156246
+"Cartagena,Colômbia","Rio de Janeiro, Rio de Janeiro",10.426557,-75.544167,-22.911014,-43.209373,5112.156246
+Confins,"Cartagena,Colômbia",-19.628655,-43.993519,10.426557,-75.544167,4806.955872
+"Cartagena,Colômbia",Confins,10.426557,-75.544167,-19.628655,-43.993519,4806.955872
+"Cartagena,Colômbia",Panama City - Florida,10.426557,-75.544167,30.158652,-85.660294,2431.31551
+"Cartagena,Colômbia",Cidade do Panamá,10.426557,-75.544167,19.462325,-99.177242,2726.447222
+Ibagué,"Cartagena,Colômbia",4.438603,-75.210886,10.426557,-75.544167,666.842362
+"Cartagena,Colômbia","Recife, Pernambuco",10.426557,-75.544167,-8.058493,-34.884819,4947.417105
+"Recife, Pernambuco","Cartagena,Colômbia",-8.058493,-34.884819,10.426557,-75.544167,4947.417105
+"Cartagena,Colômbia",Medellín,10.426557,-75.544167,6.269732,-75.60256,462.262371
+"Belém, Pará","Cartagena,Colômbia",-1.45056,-48.468245,10.426557,-75.544167,3273.983466
+"Cartagena,Colômbia","Belo Horizonte, Minas Gerais",10.426557,-75.544167,-19.922732,-43.945095,4832.376479
+"Belo Horizonte, Minas Gerais","Cartagena,Colômbia",-19.922732,-43.945095,10.426557,-75.544167,4832.376479
+Pequim,Pyongyang,40.190632,116.412144,39.016798,125.747361,809.955451
+Pyongyang,Pequim,39.016798,125.747361,40.190632,116.412144,809.955451
+"Fort Benning, Geórgia",Guarulhos,32.39446,-84.806264,-23.454237,-46.533745,7421.214509
+Guarulhos,"Fort Benning, Geórgia",-23.454237,-46.533745,32.39446,-84.806264,7421.214509
+"Brasília, Distrito Federal","Fort Benning, Geórgia",-15.793987,-47.8828,32.39446,-84.806264,6644.247663
+Macapá,"São Luís, Maranhão",0.034193,-51.07018,-2.529526,-44.296394,805.126452
+"São Luís, Maranhão",Macapá,-2.529526,-44.296394,0.034193,-51.07018,805.126452
+"Manaus, Amazonas",Macapá,-3.200177,-59.498929,0.034193,-51.07018,1003.417801
+Macapá,"Manaus, Amazonas",0.034193,-51.07018,-3.200177,-59.498929,1003.417801
+Santa Elena de Uairén,Caracas,4.595869,-61.111031,10.499344,-66.920951,916.88572
+"Brasília, Distrito Federal",Tórshavn,-15.793987,-47.8828,62.01014,-6.771571,9369.977547
+Tórshavn,"Brasília, Distrito Federal",62.01014,-6.771571,-15.793987,-47.8828,9369.977547
+"Belo Horizonte, Minas Gerais",Tórshavn,-19.922732,-43.945095,62.01014,-6.771571,9684.524554
+Tórshavn,"Belo Horizonte, Minas Gerais",62.01014,-6.771571,-19.922732,-43.945095,9684.524554
+"Saint John's, Antígua e Barbuda","Brasília, Distrito Federal",17.118457,-61.844851,-15.793987,-47.8828,3966.940182
+Nova York,"Saint John's, Antígua e Barbuda",40.712728,-74.006015,17.118457,-61.844851,2871.353898
