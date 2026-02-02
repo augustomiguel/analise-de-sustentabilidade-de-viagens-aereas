@@ -68,7 +68,17 @@ class GeoCacheManager:
         df_cache_api = self._load_api_cache()
         df_local = self._load_local_base()
         
-        self.mapa_coordenadas = pd.concat([df_cache_api, df_local], ignore_index=True)
+        # self.mapa_coordenadas = pd.concat([df_cache_api, df_local], ignore_index=True)
+        # Cria uma lista apenas com os DataFrames que não estão vazios
+        dfs_para_concatenar = [df for df in [df_cache_api, df_local] if not df.empty]
+
+        if dfs_para_concatenar:
+            self.mapa_coordenadas = pd.concat(dfs_para_concatenar, ignore_index=True)
+        else:
+            # Se tudo estiver vazio, cria um DataFrame vazio com as colunas certas
+            self.mapa_coordenadas = pd.DataFrame()
+
+
         self.mapa_coordenadas = self.mapa_coordenadas.drop_duplicates(subset=['Cidade'], keep='first')
         
         print(f"✅ GeoCacheManager: Mapa de coordenadas inicializado com {len(self.mapa_coordenadas)} cidades.", flush=True)

@@ -10,6 +10,7 @@ from viagens.filtro import Filtro
 ANOS_PARA_PROCESSAR = [2023,2024,2025] 
 ORGS_PARA_PROCESSAR = ['UFPB', 'UFCG'] 
 BAIXAR_NOVOS_DADOS = False 
+# BAIXAR_NOVOS_DADOS = True 
 
 def etapa_obter_dados(ano):
     print(f"--- 1. OBTENDO DADOS BRUTOS PARA {ano} ---")
@@ -49,14 +50,24 @@ def main():
     
     for ano in ANOS_PARA_PROCESSAR:
         print(f"\n{'='*30} INICIANDO ANO: {ano} {'='*30}")
-        # dados_brutos = etapa_obter_dados(ano)
-        # if dados_brutos[0] is None: continue
+        
+        # --- ETAPA 1: BAIXAR OU CARREGAR DADOS ---
+        # Isso vai usar sua variável BAIXAR_NOVOS_DADOS
+        dados_brutos = etapa_obter_dados(ano) 
 
-        # etapa_processar_geral(ano, dados_brutos, geocoder)
+        # --- ETAPA 2: PROCESSAMENTO MESTRE ---
+        # Isso processa o 'ALL' antes de filtrar por instituição
+        if dados_brutos:
+            etapa_processar_geral(ano, dados_brutos, geocoder)
+        else:
+            print("❌ Erro: Não foi possível obter dados brutos. Pulando ano.")
+            continue
 
+        # --- ETAPA 3: RELATÓRIOS POR INSTITUIÇÃO ---
         for org in ORGS_PARA_PROCESSAR:
             etapa_relatorios_instituicao(ano, org)
 
+        # --- ETAPA 4: COMPARATIVO ---
         etapa_comparativo_ano(ano)
 
     end_time = time.time()
