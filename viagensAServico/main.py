@@ -31,11 +31,8 @@ def etapa_relatorios_instituicao(ano, orgao):
     filtro.filtrar_e_salvar(orgao)
     
     reporter = ReportGenerator(ano=ano)
-    # Gera os CSVs de dados
-    reporter.generate_monthly_report(orgao=orgao)
+    reporter.generate_monthly_report(orgao=orgao) 
     reporter.generate_metrics_report(orgao=orgao)
-    
-    # --- GERA O DASHBOARD CONSOLIDADO (TUDO EM UM ARQUIVO) ---
     reporter.generate_consolidated_dashboard(orgao=orgao)
 
 def etapa_comparativo_ano(ano):
@@ -43,32 +40,37 @@ def etapa_comparativo_ano(ano):
     reporter = ReportGenerator(ano=ano)
     reporter.generate_comparison_pdf()
 
+
+
 def main():
     start_time = time.time()
     print("--- INICIALIZANDO GEOCODER (CACHE MANAGER) ---")
     geocoder = GeoCacheManager(user_agent="MeuProjetoSustentabilidade/1.0")
     
+    # Loop principal (Processamento Anual)
     for ano in ANOS_PARA_PROCESSAR:
         print(f"\n{'='*30} INICIANDO ANO: {ano} {'='*30}")
         
-        # --- ETAPA 1: BAIXAR OU CARREGAR DADOS ---
-        # Isso vai usar sua variável BAIXAR_NOVOS_DADOS
-        dados_brutos = etapa_obter_dados(ano) 
-
-        # --- ETAPA 2: PROCESSAMENTO MESTRE ---
-        # Isso processa o 'ALL' antes de filtrar por instituição
+        dados_brutos = etapa_obter_dados(ano)
         if dados_brutos:
             etapa_processar_geral(ano, dados_brutos, geocoder)
         else:
-            print("❌ Erro: Não foi possível obter dados brutos. Pulando ano.")
             continue
 
-        # --- ETAPA 3: RELATÓRIOS POR INSTITUIÇÃO ---
         for org in ORGS_PARA_PROCESSAR:
             etapa_relatorios_instituicao(ano, org)
 
-        # --- ETAPA 4: COMPARATIVO ---
         etapa_comparativo_ano(ano)
+
+    # --- NOVA ETAPA FINAL: GERAÇÃO DA MATRIZ EXCEL CONSOLIDADA ---
+    print(f"\n{'='*30} GERANDO MATRIZES EXCEL CONSOLIDADAS {'='*30}")
+    
+    # Instanciamos o gerador (o ano aqui é irrelevante, usamos só os métodos)
+    reporter_final = ReportGenerator(ano=2025) 
+    
+    for org in ORGS_PARA_PROCESSAR:
+        # Gera a matriz contendo apenas os anos que você quer
+        reporter_final.generate_excel_matrix(orgao=org, anos_selecionados=[2024, 2025])
 
     end_time = time.time()
     print(f"\n{'='*50}")

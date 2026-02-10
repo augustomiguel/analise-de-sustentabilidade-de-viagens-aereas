@@ -7,6 +7,7 @@ import glob
 import re
 from PIL import Image
 
+
 class ReportGenerator:
     
     BASELINE_HISTORICO_ED1_1 = 285440.323 
@@ -242,30 +243,170 @@ class ReportGenerator:
     # --- GERADORES CSV/PDF PRINCIPAIS ---
 
     def generate_monthly_report(self, orgao: str):
-        print(f"🔄 Gerando Relatório Mensal (CSV) para {orgao}...")
+        print(f"🔄 Gerando Relatório Mensal (CSV e Visual) com Rótulos para {orgao}...")
+        
         df = self._load_master_file(orgao)
         if df.empty: return
+
         df['Data_Viagem'] = pd.to_datetime(df['Período - Data de início'], format='%d/%m/%Y', errors='coerce')
         df.dropna(subset=['Data_Viagem'], inplace=True)
+        
         df['Mes_Num'] = df['Data_Viagem'].dt.month
         df['Mes_Ano'] = df['Mes_Num'].apply(lambda x: f"{self.ano}-{x:02d}")
+
         for col in ['Distância (GCD)', 'Emissões (KgCO2eq)', 'Valor passagens']:
             df[col] = pd.to_numeric(df[col].astype(str).str.replace(',', '.', regex=False), errors='coerce').fillna(0)
+
         df_agrupado = df.groupby(['Mes_Ano', 'Mes_Num']).agg(
             Total_Distancia_Km = ('Distância (GCD)', 'sum'),
             Total_Emissoes_KgCO2eq = ('Emissões (KgCO2eq)', 'sum'),
             Total_Viagens = ('Identificador do processo de viagem', 'count'),
             Total_Passagens = ('Valor passagens', 'sum')
         ).reset_index()
+
         meses_template = pd.DataFrame({'Mes_Num': range(1, 13)})
         meses_template['Mes_Ano'] = meses_template['Mes_Num'].apply(lambda x: f"{self.ano}-{x:02d}")
+        
         df_mensal = pd.merge(meses_template, df_agrupado, on=['Mes_Num', 'Mes_Ano'], how='left')
         df_mensal.fillna(0, inplace=True)
         df_mensal['Total_Viagens'] = df_mensal['Total_Viagens'].astype(int)
-        caminho = os.path.join(self.pasta_relatorios_mensais, f"relatorio_mensal_{orgao}_aereo_{self.ano}.csv")
-        df_mensal.round(2).to_csv(caminho, index=False)
-        print(f"   - ✅ Relatório mensal salvo.")
+        
+        # --- CORREÇÃO DO FORMATO DE MOEDA ---
+        # Cria uma coluna de texto já formatada com R$ para o gráfico não dar erro
+        def formatar_moeda(valor):
+            return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+            
+        df_mensal['Rotulo_Valor'] = df_mensal['Total_Passagens'].apply(formatar_moeda)
 
+        caminho_csv = os.path.join(self.pasta_relatorios_mensais, f"relatorio_mensal_{orgao}_aereo_{self.ano}.csv")
+        df_mensal.round(2).to_csv(caminho_csv, index=False)
+
+        try:
+            LARGURA_GRAFICO = 800
+            ALTURA_GRAFICO = 400
+
+            base_gastos = alt.Chart(df_mensal).encode(
+                x=alt.X('Mes_Ano', title='Mês', axis=alt.Axis(labelAngle=-45)),
+                y=alt.Y('Total_Passagens', title='Valor Gasto (R$)')
+            )
+
+            barras_gastos = base_gastos.mark_bar(color='#1f77b4').encode(
+                tooltip=['Mes_Ano', 'Total_Passagens', 'Total_Viagens']
+            )
+
+            # Usa a coluna de texto pronta 'Rotulo_Valor' em vez de tentar formatar no Vega
+            rotulos_gastos = base_gastos.mark_text(
+                align='center', baseline='bottom', dy=-5, fontSize=11
+            ).encode(
+                text='Rotulo_Valor' 
+            )
+
+            grafico_gastos_final = alt.layer(barras_gastos, rotulos_gastos).properties(
+                title=f'Gastos Mensais com Passagens - {orgao}',
+                width=LARGURA_GRAFICO, height=ALTURA_GRAFICO
+            )
+
+            grafico_emissoes = alt.Chart(df_mensal).mark_line(point=True, color='red').encode(
+                x=alt.X('Mes_Ano', title='Mês', axis=alt.Axis(labelAngle=-45)),
+                y=alt.Y('Total_Emissoes_KgCO2eq', title='Emissões (Kg CO2eq)'),
+                tooltip=['Mes_Ano', 'Total_Emissoes_KgCO2eq']
+            ).properties(
+                title=f'Pegada de Carbono Mensal - {orgao}',
+                width=LARGURA_GRAFICO, height=ALTURA_GRAFICO
+            )
+
+            dashboard = alt.vconcat(grafico_gastos_final, grafico_emissoes).resolve_scale(x='shared').configure_view(strokeWidth=0)
+
+            caminho_html = os.path.join(self.pasta_relatorios_mensais, f"dashboard_mensal_{orgao}_{self.ano}.html")
+            dashboard.save(caminho_html)
+            
+            caminho_pdf = os.path.join(self.pasta_relatorios_mensais, f"dashboard_mensal_{orgao}_{self.ano}.pdf")
+            dashboard.save(caminho_pdf)
+            print(f"   - ✅ Dashboard (HTML/PDF) salvo para {orgao}.")
+
+        except Exception as e:
+            print(f"   - ❌ Erro ao gerar gráficos: {e}")
+
+    def generate_excel_matrix(self, orgao: str, anos_selecionados=[2024, 2025]):
+        print(f"   📊 Gerando Matriz Excel Consolidada para {orgao}...")
+        
+        # 1. Configuração da Tabela
+        metricas = ['Distância', 'Gasto', 'Emissões']
+        meses_nomes = [
+            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ]
+        
+        colunas_multi = pd.MultiIndex.from_product([anos_selecionados, metricas], names=['Ano', 'Métrica'])
+        df_final = pd.DataFrame(index=meses_nomes, columns=colunas_multi)
+        
+        # 2. Busca os dados (CAMINHO CORRIGIDO BASEADO NA IMAGEM)
+        for ano_leitura in anos_selecionados:
+            
+            # Caminho exato conforme sua imagem:
+            # dadosViagens > dados_viagens2025 > Relatorios_Mensais > arquivo.csv
+            caminho_arquivo = os.path.join(
+                "dadosViagens", 
+                f"dados_viagens{ano_leitura}", 
+                "Relatorios_Mensais", 
+                f"relatorio_mensal_{orgao}_aereo_{ano_leitura}.csv"
+            )
+            
+            if os.path.exists(caminho_arquivo):
+                print(f"      - Lendo dados de: {caminho_arquivo}")
+                try:
+                    df_origem = pd.read_csv(caminho_arquivo)
+                    
+                    # Mapeia colunas
+                    cols_map = {
+                        'Total_Distancia_Km': 'Distância',
+                        'Total_Passagens': 'Gasto',
+                        'Total_Emissoes_KgCO2eq': 'Emissões'
+                    }
+                    
+                    for _, row in df_origem.iterrows():
+                        # Garante índice correto (0 a 11)
+                        mes_idx = int(row['Mes_Num']) - 1
+                        if 0 <= mes_idx < 12:
+                            mes_nome = meses_nomes[mes_idx]
+                            for col_csv, col_excel in cols_map.items():
+                                # Converte para float para garantir que o Excel entenda como número
+                                valor = float(str(row[col_csv]).replace(',', '.'))
+                                df_final.loc[mes_nome, (ano_leitura, col_excel)] = valor
+                                
+                except Exception as e:
+                    print(f"      ❌ Erro ao ler arquivo {ano_leitura}: {e}")
+            else:
+                print(f"      ⚠️ Arquivo NÃO encontrado: {caminho_arquivo}")
+
+        # 3. Finalização
+        df_final = df_final.fillna(0)
+        
+        # Totais
+        df_final.loc['Anual'] = df_final.sum()
+        df_final.loc['Média'] = df_final.iloc[0:12].mean()
+
+        # 4. SALVAR NA PASTA 'dadosViagens' (Conforme pedido)
+        caminho_excel = os.path.join("dadosViagens", f"matriz_completa_{orgao}.xlsx")
+        
+        # Garante que a pasta dadosViagens existe
+        if not os.path.exists("dadosViagens"):
+            os.makedirs("dadosViagens")
+
+        try:
+            with pd.ExcelWriter(caminho_excel, engine='openpyxl') as writer:
+                df_final.to_excel(writer, sheet_name='Dados', startrow=2)
+                
+                # Formatação do Título
+                worksheet = writer.sheets['Dados']
+                worksheet['A1'] = f"Dados do deslocamento aéreo - {orgao}"
+                from openpyxl.styles import Font
+                worksheet['A1'].font = Font(size=14, bold=True)
+
+            print(f"   ✅ Excel salvo com sucesso em: {os.path.abspath(caminho_excel)}")
+            
+        except Exception as e:
+            print(f"   ❌ Erro ao salvar Excel: {e}")
     def generate_metrics_report(self, orgao: str):
         print(f"🔄 Gerando Relatório de Métricas (CSV) para {orgao}...")
         df = self._load_master_file(orgao)
