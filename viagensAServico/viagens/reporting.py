@@ -380,7 +380,9 @@ class ReportGenerator:
                 print(f"      ⚠️ Arquivo NÃO encontrado: {caminho_arquivo}")
 
         # 3. Finalização
-        df_final = df_final.fillna(0)
+        # O comando infer_objects() ajusta os tipos das colunas (de Object para Float/Int)
+        # ANTES de preencher os zeros, eliminando o aviso.
+        df_final = df_final.infer_objects(copy=False).fillna(0)
         
         # Totais
         df_final.loc['Anual'] = df_final.sum()
