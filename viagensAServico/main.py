@@ -7,21 +7,22 @@ from viagens.reporting import ReportGenerator
 from viagens.filtro import Filtro
 
 # --- CONFIGURAÇÃO GLOBAL ---
-ANOS_PARA_PROCESSAR = [2019,2020,2021,2022,2023,2024,2025]
-
+ANOS_PARA_PROCESSAR = [2022,2023,2024, 2025]
 ORGS_PARA_PROCESSAR = ['UFPB', 'UFCG']
 
+# Define quantos anos no INÍCIO da lista serão usados APENAS para calcular a linha de base
+QTD_ANOS_BASELINE = 2 
+
 # --- CONTROLE DE EXECUÇÃO (Onde você decide o que roda) ---
-RODAR_PROCESSAMENTO_PESADO = False  # Coloque True se quiser processar tudo
-RODAR_GERACAO_EXCEL_FINAL = True    # Coloque True para gerar a planilha consolidada
+RODAR_PROCESSAMENTO_PESADO = False  
+RODAR_GERACAO_EXCEL_FINAL = True    
 
 # --- CONFIGURAÇÕES DO DOWNLOADER ---
-BAIXAR_NOVOS_DADOS = False # Se True, baixa do portal. Se False, usa os CSVs locais.
+BAIXAR_NOVOS_DADOS = False 
 
 # ==============================================================================
 # FUNÇÕES AUXILIARES (ETAPAS INDIVIDUAIS)
 # ==============================================================================
-
 def etapa_obter_dados(ano):
     print(f"--- 1. OBTENDO DADOS BRUTOS PARA {ano} ---")
     downloader = ViagensDownloader(ano=ano)
@@ -35,32 +36,40 @@ def etapa_processar_geral(ano, dados_brutos, geocoder):
     processor.load_data(viagem_df, passagem_df, trecho_df)
     processor.process_all() 
 
-def etapa_relatorios_instituicao(ano, orgao):
+def etapa_filtrar_e_reportar(ano, orgao, is_baseline):
     print(f"\n--- 3. FILTRANDO E REPORTANDO PARA: {orgao} / {ano} ---")
+    
+    # O filtro SEMPRE precisa rodar, pois o Baseline lê o df_master do órgão desses anos
     filtro = Filtro(ano=ano)
     filtro.filtrar_e_salvar(orgao)
     
+    # SE FOR ANO DE BASELINE, ENCERRA AQUI E NÃO GERA GRÁFICOS
+    if is_baseline:
+        print(f"   -> ⏭️ Ano {ano} reservado para Baseline. Pulando geração de Dashboards e PDFs.")
+        return
+        
     reporter = ReportGenerator(ano=ano)
+    baseline_dinamico = reporter.calcular_baseline_dinamico(orgao, ANOS_PARA_PROCESSAR)
+    
     reporter.generate_monthly_report(orgao=orgao)
-    reporter.generate_metrics_report(orgao=orgao)
-    reporter.generate_consolidated_dashboard(orgao=orgao)
-
-def etapa_comparativo_ano(ano):
-    print(f"\n--- 4. GERANDO PDF COMPARATIVO PARA {ano} ---")
-    reporter = ReportGenerator(ano=ano)
-    reporter.generate_comparison_pdf()
+    reporter.generate_metrics_report(orgao=orgao, baseline=baseline_dinamico)
+    reporter.generate_consolidated_dashboard(orgao=orgao, baseline=baseline_dinamico)
+    reporter.generate_index_panel(orgao=orgao, baseline=baseline_dinamico)
+    reporter.juntar_pdfs_em_um(orgao=orgao)
 
 # ==============================================================================
 # GRANDES BLOCOS DE EXECUÇÃO
 # ==============================================================================
 
 def executar_fluxo_anual():
-    """Executa o download, processamento e relatórios anuais (Processo Demorado)."""
+    """Executa o download, processamento e relatórios anuais."""
     print("\n🚀 INICIANDO FLUXO DE PROCESSAMENTO ANUAL COMPLETO...")
     
-    # Inicializa o Geocoder apenas uma vez para reaproveitar o cache
     print("--- INICIALIZANDO GEOCODER (CACHE MANAGER) ---")
     geocoder = GeoCacheManager(user_agent="MeuProjetoSustentabilidade/1.0")
+
+    # Identifica quais são os anos de baseline (Ex: 2011 e 2012)
+    anos_baseline = ANOS_PARA_PROCESSAR[:QTD_ANOS_BASELINE]
 
     for ano in ANOS_PARA_PROCESSAR:
         print(f"\n{'='*30} INICIANDO ANO: {ano} {'='*30}")
@@ -68,31 +77,36 @@ def executar_fluxo_anual():
         # Etapa 1: Obter Dados
         dados_brutos = etapa_obter_dados(ano)
         
-        # Etapa 2: Processar Mestre
+        # Etapa 2: Processar Mestre (Necessário para achar a distância e emissões)
         if dados_brutos:
             etapa_processar_geral(ano, dados_brutos, geocoder)
         else:
             print(f"❌ Pulei o ano {ano} por falta de dados.")
             continue
 
+        is_baseline = (ano in anos_baseline)
+
         # Etapa 3: Relatórios por Instituição
         for org in ORGS_PARA_PROCESSAR:
-            etapa_relatorios_instituicao(ano, org)
+            etapa_filtrar_e_reportar(ano, org, is_baseline)
 
-        # Etapa 4: Comparativo do Ano
-        etapa_comparativo_ano(ano)
 
 def executar_consolidacao_excel():
-    """Gera apenas a planilha Excel final consolidando todos os anos (Rápido)."""
+    """Gera apenas a planilha Excel final consolidando todos os anos reais da pesquisa."""
     print(f"\n{'='*30} GERANDO MATRIZES EXCEL CONSOLIDADAS {'='*30}")
     
-    # Instanciamos o gerador (o ano aqui é irrelevante, usamos só os métodos)
-    reporter_final = ReportGenerator(ano=2025) 
+    # Exclui os anos de baseline da tabela do Excel!
+    anos_relatorios = ANOS_PARA_PROCESSAR[QTD_ANOS_BASELINE:]
+
+    
+    if not anos_relatorios:
+        print("⚠️ Não há anos suficientes para gerar relatório além do baseline.")
+        return
+        
+    reporter_final = ReportGenerator(ano=anos_relatorios) 
     
     for org in ORGS_PARA_PROCESSAR:
-        # CORREÇÃO IMPORTANTE: Passamos a lista direta ANOS_PARA_PROCESSAR
-        # Sem colchetes extras ao redor dela!
-        reporter_final.generate_excel_matrix(orgao=org, anos_selecionados=ANOS_PARA_PROCESSAR)
+        reporter_final.generate_excel_matrix(orgao=org, anos_selecionados=anos_relatorios)
 
 # ==============================================================================
 # MAIN (PONTO DE ENTRADA)
@@ -101,17 +115,15 @@ def executar_consolidacao_excel():
 def main():
     start_time = time.time()
 
-    # 1. Decide se roda o pesado
     if RODAR_PROCESSAMENTO_PESADO:
         executar_fluxo_anual()
     else:
-        print("⏭️  PULA: Processamento pesado desativado na configuração.")
+        print("⏭️  PULA: Processamento pesado desativado.")
 
-    # 2. Decide se roda o Excel final
     if RODAR_GERACAO_EXCEL_FINAL:
         executar_consolidacao_excel()
     else:
-        print("⏭️  PULA: Geração de Excel desativada na configuração.")
+        print("⏭️  PULA: Geração de Excel desativada.")
 
     end_time = time.time()
     print(f"\n{'='*50}")
