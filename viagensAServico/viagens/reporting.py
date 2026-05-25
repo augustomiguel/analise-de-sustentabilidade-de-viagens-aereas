@@ -193,8 +193,9 @@ class ReportGenerator:
         except Exception as e: print(f"   - ❌ Erro ao juntar PDFs: {e}")
 
     def generate_excel_matrix(self, orgao: str, anos_selecionados: list):
-        print(f"   📊 Gerando Matriz Excel Consolidada para {orgao}...")
-        metricas = ['Distância', 'Gasto', 'Emissões']
+        print(f"   📊 Gerando Matriz Excel Consolidada para {orgao} (em Toneladas)...")
+        # 1. Mudamos o nome da métrica para deixar claro que é Tonelada
+        metricas = ['Distância', 'Gasto', 'Emissões (t)']
         meses_nomes = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
         colunas_multi = pd.MultiIndex.from_product([anos_selecionados, metricas], names=['Ano', 'Métrica'])
         df_final = pd.DataFrame(index=meses_nomes, columns=colunas_multi)
@@ -203,12 +204,21 @@ class ReportGenerator:
             caminho_arquivo = os.path.join("dadosViagens", f"dados_viagens{ano}", "Relatorios_Mensais", f"relatorio_mensal_{orgao}_aereo_{ano}.csv")
             if os.path.exists(caminho_arquivo):
                 df_origem = pd.read_csv(caminho_arquivo)
-                cols_map = {'Total_Distancia_Km': 'Distância', 'Total_Passagens': 'Gasto', 'Total_Emissoes_KgCO2eq': 'Emissões'}
+                
+                # 2. Mapeamento
+                cols_map = {'Total_Distancia_Km': 'Distância', 'Total_Passagens': 'Gasto', 'Total_Emissoes_KgCO2eq': 'Emissões (t)'}
+                
                 for _, row in df_origem.iterrows():
                     mes_idx = int(row['Mes_Num']) - 1
                     if 0 <= mes_idx < 12:
                         for col_csv, col_excel in cols_map.items():
-                            df_final.loc[meses_nomes[mes_idx], (ano, col_excel)] = float(str(row[col_csv]).replace(',', '.'))
+                            valor = float(str(row[col_csv]).replace(',', '.'))
+                            
+                            # 3. divide por 1000!
+                            if col_csv == 'Total_Emissoes_KgCO2eq':
+                                valor = valor / 1000
+                                
+                            df_final.loc[meses_nomes[mes_idx], (ano, col_excel)] = valor
 
         df_final = df_final.infer_objects(copy=False).fillna(0)
         df_final.loc['Anual'] = df_final.sum()
@@ -217,5 +227,7 @@ class ReportGenerator:
         caminho_excel = os.path.join("dadosViagens", f"matriz_completa_{orgao}.xlsx")
         with pd.ExcelWriter(caminho_excel, engine='openpyxl') as writer:
             df_final.to_excel(writer, sheet_name='Dados', startrow=2)
-            writer.sheets['Dados']['A1'] = f"Dados do deslocamento aéreo - {orgao}"
+            # Título atualizado
+            writer.sheets['Dados']['A1'] = f"Dados do deslocamento aéreo - {orgao} (Emissões em Toneladas de CO2eq)"
             writer.sheets['Dados']['A1'].font = __import__('openpyxl').styles.Font(size=14, bold=True)
+        print(f"   ✅ Excel salvo em: {os.path.abspath(caminho_excel)}")

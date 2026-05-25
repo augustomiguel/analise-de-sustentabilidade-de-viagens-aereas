@@ -29,6 +29,7 @@ class CalculadoraEmissoes:
         df_viagens_agregadas['Categoria Distância'] = np.select(conditions, ['Muito Curta (Evitável)', 'Curta Distância', 'Longa Distância'], default='Não Calculada')
         df_viagens_agregadas['EF Aplicado'] = np.select(conditions, [self.EF_ECO_MUITO_CURTA, self.EF_ECO_CURTA, self.EF_ECO_LONGA], default=np.nan)
         df_viagens_agregadas['Emissões (KgCO2eq)'] = (df_viagens_agregadas['Distância (GCD)'] * df_viagens_agregadas['EF Aplicado']).round(4)
-        
+        df_viagens_agregadas['Emissões (tCO2eq)'] = (df_viagens_agregadas['Emissões (KgCO2eq)'] / 1000).round(4)
+
         print("   - ✅ Emissões calculadas.")
         return df_viagens_agregadas
