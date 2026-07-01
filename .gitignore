@@ -33,6 +33,7 @@ temp/
 # 1. Dados Brutos e Temporários (Gerados pelo viagens_dowload.py)
 # Estes arquivos são grandes e devem ser ignorados.
 dadosViagens/
+dadosViagens TESTES
 *.zip
 
 # 2. Cache de Geocodificação (Criado pelo distanciaCidades.py)

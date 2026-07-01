@@ -7,14 +7,14 @@ from viagens.reporting import ReportGenerator
 from viagens.filtro import Filtro
 
 # --- CONFIGURAÇÃO GLOBAL ---
-ANOS_PARA_PROCESSAR = [2023,2024,2025]
+ANOS_PARA_PROCESSAR = [2022,2023,2024,2025]
 ORGS_PARA_PROCESSAR = ['UFPB', 'UFCG']
 
 # Define quantos anos no INÍCIO da lista serão usados APENAS para calcular a linha de base
-QTD_ANOS_BASELINE = 1
+QTD_ANOS_BASELINE = 2
 
 # --- CONTROLE DE EXECUÇÃO (Onde você decide o que roda) ---
-RODAR_PROCESSAMENTO_PESADO = True  
+RODAR_PROCESSAMENTO_PESADO = False  
 RODAR_GERACAO_EXCEL_FINAL = True    
 
 # --- CONFIGURAÇÕES DO DOWNLOADER ---
